@@ -1,14 +1,16 @@
 const express = require('express');
-const { rmSync } = require('fs');
+//const { rmSync } = require('fs');
+const cors = require('cors');
 
 const server = express(); // constante para não perder o servidor de besteira
+server.use(cors());
 server.use(express.json());
-server.use(express.urlencoded({extended: true}));
+
+//server.use(express.urlencoded({extended: true}));
+
+let estoque  = [];
 
 server.listen(3000,() =>{console.log('servidor rodando')});
-server.get('/',(req,res)=>{
-    res.send('hello world')
-});
 
 server.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -114,3 +116,17 @@ server.post('/Menu/Compras/Cadastrar', (req, res)=>{
 server.get('/Menu/Compras/Lista', (req,res)=>{
     //vai mostrar o historico das compras.
 });
+
+server.post('/Menu/Estoque/Adicionar', (req, res)=> {
+    // const{produtoId, quantidade} = req.body;
+    const produtos = req.body;
+    estoque.push(produtos);
+    res.json({message: `Produto ${produtos.produtoId} adicionado com quantidade ${produtos.quantidade}`});  
+});
+
+server.get('/Menu/Estoque/listar', (req, res) => {
+    res.json(estoque);
+});
+
+server.post()
+
