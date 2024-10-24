@@ -6,6 +6,9 @@ server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 
 server.listen(3000,() =>{console.log('servidor rodando')});
+server.get('/',(req,res)=>{
+    res.send('hello world')
+});
 
 server.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -21,7 +24,7 @@ server.post('/login', (req, res) => {
 });
 // "/Menu será o link da tala principal"
 
-server.post('Menu/Produto/Cadastro', (req,res)=>{
+server.post('/Menu/Produto/Cadastro', (req,res)=>{
     const Produto_Nome = req.body.Produto_Nome;
     const Produto_Valor_Unt = parseFloat(parseFloat(req.body.Produto_Valor_Unt).toFixed(2));
     //tratar pra aceitar apenas numeros
@@ -36,7 +39,7 @@ server.post('Menu/Produto/Cadastro', (req,res)=>{
 });
 /*Dentro do catalogo deve aparecer para cada produto as opções de ATUALIZAR e DELETAR
   quando o usuário clicar para ver um produto especifico */
-server.post('Menu/CatalogoProduto/Atualizar', (req,res)=>{
+server.post('/Menu/CatalogoProduto/Atualizar', (req,res)=>{
     const Produto_Nome = req.body.Produto_Nome;
     const Produto_Valor_Unt = parseFloat(parseFloat(req.body.Produto_Valor_Unt).toFixed(2));
     //tratar pra aceitar apenas numeros
@@ -49,14 +52,14 @@ server.post('Menu/CatalogoProduto/Atualizar', (req,res)=>{
     */
     res.send(`${Produto_Nome} foi atualizado com sucesso!`);
 });
-server.delete('Menu/CatalogoProduto/Deletar',(req,res)=>{
+server.delete('/Menu/CatalogoProduto/Deletar',(req,res)=>{
     //método para deletar que ainda não foi aprendido
     //deve pedir se o usuário tem certeza antes de apagar
     res.send(`${Produto_Nome} foi apagado com sucesso!`);
 });
 
 //############################################################################################
-server.post('Menu/Vendas/Cadastro',(req, res)=> {
+server.post('/Menu/Vendas/Cadastro',(req, res)=> {
     const Produto =req.body.Produto;// produto vendido
     const Quantidade = parseInt(req.body.Quantidade); //quantos produtos iguais vendidos
     const Vendedor = req.body.Vendedor; //vendedores cadastrados
@@ -70,7 +73,7 @@ server.post('Menu/Vendas/Cadastro',(req, res)=> {
 });
 
 //#############################################################################################
-server.post('Menu/Fornecedor/Cadastro', (req,res)=>{
+server.post('/Menu/Fornecedor/Cadastro', (req,res)=>{
     const Fornecedor_Nome = req.body.Fornecedor_Nome;
     const Fornecedor_CNPJ = req.body.Fornecedor_CNPJ;
     const Fornecedor_Endereço = req.body.Fornecedor_Endereço;
@@ -80,7 +83,7 @@ server.post('Menu/Fornecedor/Cadastro', (req,res)=>{
     //Tratar para evitar repetições
     res.send(`${Fornecedor_Nome} foi cadastrado com sucesso!`);
 });
-server.put('Menu/Fornecedor/Atualizar', (req,res)=>{
+server.put('/Menu/Fornecedor/Atualizar', (req,res)=>{
     const Fornecedor_Nome = req.body.Fornecedor_Nome;
     const Fornecedor_CNPJ = req.body.Fornecedor_CNPJ;
     const Fornecedor_Endereço = req.body.Fornecedor_Endereço;
@@ -90,7 +93,7 @@ server.put('Menu/Fornecedor/Atualizar', (req,res)=>{
     //Tratar para evitar repetições
     res.send(`${Fornecedor_Nome} foi atualizado com sucesso!`);
 });
-server.delete('Menu/Fornecedor/Deletar',(req,res)=>{
+server.delete('/Menu/Fornecedor/Deletar',(req,res)=>{
     //método para deletar que ainda não foi aprendido
     //deve pedir se o usuário tem certeza antes de apagar
     res.send(`${Fornecedor_Nome} foi apagado com sucesso!`)
@@ -98,7 +101,7 @@ server.delete('Menu/Fornecedor/Deletar',(req,res)=>{
 
 //###########################################################################################
 
-server.post('Menu/Compras/Cadastrar', (req, res)=>{
+server.post('/Menu/Compras/Cadastrar', (req, res)=>{
     let Compra_Data_Inicial = new Date();// não permitir + de 1 semana de atraso
     let Compra_Data_Vencimento = new Date(); // não permitir o vencimento ser antes da data inicial
     Compra_Data_Inicial =req.body.Compra_Data_Inicial;
@@ -108,6 +111,6 @@ server.post('Menu/Compras/Cadastrar', (req, res)=>{
     //Tratar casos de variaveis vazias
     res.send("Certo");
 });
-server.get('Menu/Compras/Lista', (req,res)=>{
+server.get('/Menu/Compras/Lista', (req,res)=>{
     //vai mostrar o historico das compras.
 });
