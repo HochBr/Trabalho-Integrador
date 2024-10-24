@@ -25,7 +25,7 @@ body, html {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  padding: 0;
   background: linear-gradient(to right, #6b7a8d, #6b7a8d);
 }
 
@@ -194,6 +194,12 @@ body, html {
   align-items: center;
 }
 
+.container-fluid{
+  padding: 0;
+}
 
+.col-12{
+  padding: 0;
+}
 
 

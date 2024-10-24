@@ -21,7 +21,7 @@ function Login() {
   };
 
   return (
-    <div className="container container-fluid">
+    <div className="container-fluid">
       <div className="container-login">
         <div className="wrap-login">
           <form className="login-form" onSubmit={handleSubmit}>
@@ -55,7 +55,7 @@ function Login() {
             {erro && <div className="txt1">{erro}</div>}
 
             <div className="container-login-form-btn">
-              <button className="login-form-btn">Login</button>
+              <button className="login-form-btn">Entrar</button>
             </div>
 
             <div className="text-center">
