@@ -84,7 +84,7 @@ server.post('/Menu/Vendas/Cadastro',(req, res)=> {
     o valor total é só fazer a conta com o valor do produto e salvar no banco
     a data pega direto do sistema
     */
-    vetVendasvendas.push(venda);
+    vetVendas.push(venda);
     res.send("Certo");
 });
 server.get('/Menu/Vendas/Listar', (req, res) => {
