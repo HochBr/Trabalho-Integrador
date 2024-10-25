@@ -1,14 +1,21 @@
 const express = require('express');
-//const { rmSync } = require('fs');
+// const { rmSync } = require('fs');
 const cors = require('cors');
 
 const server = express(); // constante para não perder o servidor de besteira
 server.use(cors());
 server.use(express.json());
 
-//server.use(express.urlencoded({extended: true}));
+// server.use(express.urlencoded({extended: true}));
 
-let estoque  = [];
+let vetEstoque  = [];
+let vetProdutos = [];
+let vetFornecedores = [];
+let vetVendas = [];
+let vetCompras = [];
+let vetClientes = [];
+let vetVendedores = [];
+let vetDevedores = [];
 
 server.listen(3000,() =>{console.log('servidor rodando')});
 
@@ -27,17 +34,24 @@ server.post('/login', (req, res) => {
 // "/Menu será o link da tala principal"
 
 server.post('/Menu/Produto/Cadastro', (req,res)=>{
-    const Produto_Nome = req.body.Produto_Nome;
-    const Produto_Valor_Unt = parseFloat(parseFloat(req.body.Produto_Valor_Unt).toFixed(2));
-    //tratar pra aceitar apenas numeros
-    const Produto_Marca = req.body.Produto_Marca;
-    const Produto_Fornecedor = req.body.Produto_Fornecedor;
-    //mostrar uma listas dos fornecedores já cadastrados
-    const Produto_Categoria = req.body.Produto_Categoria;
-    /*Lógica para verificar se alguma das variaveis está vazia
-    res.send(tais colunas estão vazias)
-    */
-    res.send(`${Produto_Nome} foi cadastrado com sucesso!`);
+    const { Produto_Nome, Produto_Valor_Unt, Produto_Marca, Produto_Fornecedor, Produto_Categoria } = req.body;
+    const produto = {
+        Produto_Nome,
+        Produto_Valor_Unt: parseFloat(Produto_Valor_Unt).toFixed(2),
+        //tratar pra aceitar apenas numeros
+        Produto_Marca,
+        Produto_Fornecedor,
+        //mostrar uma listas dos fornecedores já cadastrados
+        Produto_Categoria
+        // Lógica para verificar se alguma das variaveis está vazia
+        // res.send(tais colunas estão vazias)
+    }
+    vetProdutos.push(produto)
+    res.send(`${produto.Produto_Nome} foi cadastrado com sucesso!`);
+});
+
+server.get('/Menu/Produtos/Listar', (req, res) => {
+    res.json(vetProdutos);
 });
 /*Dentro do catalogo deve aparecer para cada produto as opções de ATUALIZAR e DELETAR
   quando o usuário clicar para ver um produto especifico */
@@ -62,29 +76,41 @@ server.delete('/Menu/CatalogoProduto/Deletar',(req,res)=>{
 
 //############################################################################################
 server.post('/Menu/Vendas/Cadastro',(req, res)=> {
-    const Produto =req.body.Produto;// produto vendido
-    const Quantidade = parseInt(req.body.Quantidade); //quantos produtos iguais vendidos
-    const Vendedor = req.body.Vendedor; //vendedores cadastrados
+    const { Produto, Quantidade, Vendedor } = req.body;
+    const venda = { Produto, Quantidade, Vendedor, Data: new Date() };
     /*
     planejar a lógica para adicionar mais de um produto no mesmo envio
     verificar o estoque para cada um dos envios e alertar os que não tiver o produto no estoque
     o valor total é só fazer a conta com o valor do produto e salvar no banco
     a data pega direto do sistema
     */
-   res.send("Certo");
+    vetVendasvendas.push(venda);
+    res.send("Certo");
 });
-
+server.get('/Menu/Vendas/Listar', (req, res) => {
+    res.json(vetVendas);
+});
 //#############################################################################################
 server.post('/Menu/Fornecedor/Cadastro', (req,res)=>{
-    const Fornecedor_Nome = req.body.Fornecedor_Nome;
-    const Fornecedor_CNPJ = req.body.Fornecedor_CNPJ;
-    const Fornecedor_Endereço = req.body.Fornecedor_Endereço;
-    const Fornecedor_Telefone = req.body.Fornecedor_Telefone;
-    const Fornecedor_Email = req.body.Fornecedor_Email;
+    const { Fornecedor_Nome, Fornecedor_CNPJ, Fornecedor_Endereço, Fornecedor_Telefone, Fornecedor_Email } = req.body;
     //Tratar casos de variaveis vazias
     //Tratar para evitar repetições
+    const novoFornecedor = {
+        Fornecedor_Nome,
+        Fornecedor_CNPJ,
+        Fornecedor_Endereço,
+        Fornecedor_Telefone,
+        Fornecedor_Email
+    };
+
+    vetFornecedores.push(novoFornecedor);
     res.send(`${Fornecedor_Nome} foi cadastrado com sucesso!`);
 });
+
+server.get('/Menu/Fornecedor/Listar', (req, res) => {
+    res.json(vetFornecedores);
+});
+
 server.put('/Menu/Fornecedor/Atualizar', (req,res)=>{
     const Fornecedor_Nome = req.body.Fornecedor_Nome;
     const Fornecedor_CNPJ = req.body.Fornecedor_CNPJ;
@@ -104,29 +130,23 @@ server.delete('/Menu/Fornecedor/Deletar',(req,res)=>{
 //###########################################################################################
 
 server.post('/Menu/Compras/Cadastrar', (req, res)=>{
-    let Compra_Data_Inicial = new Date();// não permitir + de 1 semana de atraso
-    let Compra_Data_Vencimento = new Date(); // não permitir o vencimento ser antes da data inicial
-    Compra_Data_Inicial =req.body.Compra_Data_Inicial;
-    Compra_Data_Vencimento = req.body.Compra_Data_Vencimento;
-    const Compra_Quantidade = req.body.Compra_Quantidade; // >0
-    const Compra_Produto = req.body.Compra_Produto; 
-    //Tratar casos de variaveis vazias
+    const { Compra_Data_Inicial, Compra_Data_Vencimento, Compra_Quantidade, Compra_Produto } = req.body;
+    const compra = { Compra_Data_Inicial, Compra_Data_Vencimento, Compra_Quantidade, Compra_Produto };
+    //Tratar casos de variaveis vazias/invalidas
+    vetCompras.push(compra);
     res.send("Certo");
 });
 server.get('/Menu/Compras/Lista', (req,res)=>{
-    //vai mostrar o historico das compras.
+    res.json(vetCompras);
 });
 
 server.post('/Menu/Estoque/Adicionar', (req, res)=> {
     // const{produtoId, quantidade} = req.body;
     const produtos = req.body;
-    estoque.push(produtos);
+    vetEstoque.push(produtos);
     res.json({message: `Produto ${produtos.produtoId} adicionado com quantidade ${produtos.quantidade}`});  
 });
 
 server.get('/Menu/Estoque/listar', (req, res) => {
-    res.json(estoque);
+    res.json(vetEstoque);
 });
-
-server.post()
-
