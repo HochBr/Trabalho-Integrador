@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import logo from "./assets/gas.png";
 import './telageral.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [usuario, setUsuario] = useState(""); // Estado para o usuário
   const [senha, setSenha] = useState(""); // Estado para a senha
   const [erro, setErro] = useState(""); // Estado para a mensagem de erro
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault(); 
 
@@ -14,10 +15,14 @@ function Login() {
     if (usuario === "" || senha === "") {
       setErro("Por favor, preencha ambos os campos."); 
     } else {
-      //pra verificar se existe
-      setErro(""); 
-      console.log("Autenticando...");
+      if(usuario === "admin" || senha === "admin"){
+        navigate("/home");
+      }
+      else{
+        setErro("Usuário e/ou Senha incorretos");
+      }
     }
+    
   };
 
   return (

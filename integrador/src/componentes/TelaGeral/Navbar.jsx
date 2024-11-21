@@ -16,7 +16,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import { useAppStore } from '../../appStore.jsx';
 import { useNavigate } from 'react-router-dom';
-
+import logo from './assets/logo.png'
 const AppBar = styled(MuiAppBar, {
 })(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
@@ -48,6 +48,7 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
   const navigate = useNavigate();
+
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -141,7 +142,19 @@ export default function Navbar() {
             color="inherit"
             onClick={() => navigate("/home")} // Substitua com a navegação desejada
           >
-            Home
+            <Box 
+              sx={{
+                width: { xs: '30px', sm: '40px', md: '50px' }, // Tamanhos diferentes para breakpoints
+                height: { xs: '30px', sm: '40px', md: '50px' },
+              }}
+            >
+              <img 
+                src={logo} 
+                alt="Botijão de gás prata" 
+                style={{ width: '100%', height: '100%' }} 
+              />
+            </Box>
+
           </Button>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
