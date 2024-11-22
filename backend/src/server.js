@@ -1,13 +1,23 @@
 const express = require('express');
 // const { rmSync } = require('fs');
+const db = require("./db");
 const cors = require('cors');
 
 const server = express(); // constante para não perder o servidor de besteira
 server.use(cors());
 server.use(express.json());
+server.use(express.urlencoded({extended: true}));
 
-// server.use(express.urlencoded({extended: true}));
 
+server.get("/test-db", async (req, res) => {
+    try {
+        const result = await db.any("SELECT 1 AS resultado");
+        res.status(200).json({ message: "Conexão bem-sucedida!", result });
+    } catch (error) {
+        console.error("Erro ao conectar ao banco de dados:", error);
+        res.status(500).json({ message: "Erro ao conectar ao banco de dados.", error });
+    }
+});
 let vetEstoque  = [];
 let vetProdutos = [];
 let vetFornecedores = [];
