@@ -2,8 +2,8 @@ import React from 'react';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { styled, useTheme } from '@mui/material/styles';
+
+import { styled } from '@mui/material/styles';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -22,12 +22,12 @@ const Home = () => {
         
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <h1>Home</h1>
+          <h1>CadastroV</h1>
         </Box>
       </Box>
       
     </div>
-  )
+  );
 }
 
 export default Home

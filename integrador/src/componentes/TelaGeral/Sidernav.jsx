@@ -102,9 +102,11 @@ export default function MiniDrawer() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex'}}>
       <CssBaseline />
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent"
+        open={open}
+        sx={{ '& .MuiDrawer-paper': { paddingTop: '55px' } }}>
         {/*<DrawerHeader>
           <IconButton onClick={()=>setOpen(!open)}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -112,20 +114,6 @@ export default function MiniDrawer() {
         </DrawerHeader>*/}
         <Divider />
         <List>
-           {/* Botão Catálogo */}
-  <ListItem disablePadding sx={{ display: 'block' }}>
-    <ListItemButton onClick={() => open && navigate("/catalogo-Produtos")}>
-      <ListItemIcon
-        sx={[
-          { minWidth: 0, justifyContent: 'center' },
-          open ? { mr: 3 } : { mr: 'auto' },
-        ]}
-      >
-        <ImportContactsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Catálogo" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
-    </ListItemButton>
-  </ListItem>
           {/* Botão Cadastros */}
           <ListItem disablePadding sx={{ display: 'block' }}>
             <ListItemButton onClick={handleToggleCadastros}>
