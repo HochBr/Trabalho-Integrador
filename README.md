@@ -1,5 +1,8 @@
 # **Projeto-Integrador-2024.2 💻** 
 Projeto integrador dos compontentes curriculares de Engenharia da Software I, Programação II e Banco de Dados I
+
+Requisitos, telas, casos de testes e modelos do projeto estão localizados nos arquivos do diretório *Projeto*
+
 ## Sistema de gerenciamento de vendas📊📈
 ### Descrição:
 O sistema de gerenciamento será destinado a empresa Transportes Botezini LTDA, alocada na cidade de Nova Erechim - SC 
