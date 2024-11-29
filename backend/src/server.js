@@ -1,6 +1,6 @@
 const express = require('express');
 // const { rmSync } = require('fs');
-const db = require("./db");
+const db = require("./config/db");
 const cors = require('cors');
 
 const server = express(); // constante para não perder o servidor de besteira
