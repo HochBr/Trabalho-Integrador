@@ -2,12 +2,14 @@ const express = require('express');
 // const { rmSync } = require('fs');
 const db = require("./config/db");
 const cors = require('cors');
+const produtoRoutes = require('./routes/produtoRoutes');
 
 const server = express(); // constante para não perder o servidor de besteira
 server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 
+server.use('/', produtoRoutes);
 
 server.get("/test-db", async (req, res) => {
     try {
