@@ -14,11 +14,11 @@ exports.listarProdutos = async (req, res) => {
 
 exports.adicionarProduto = async(req, res) => {
     try {
-        const {id, nome, valor, marca, categoriaid} = req.body;
+        const {id, nome, valor, marca, CategoriaID, FornecedorCNPJ} = req.body;
 
         await db.none(
-            'INSERT INTO produto (id, nome, valor, marca, categoriaid) VALUES ($1, $2, $3, $4, $5)', 
-            [id, nome, valor, marca, categoriaid]);
+            'INSERT INTO produto (id, nome, valor, marca, CategoriaID, FornecedorCNPJ) VALUES ($1, $2, $3, $4, $5, $6)', 
+            [id, nome, valor, marca, CategoriaID, FornecedorCNPJ]);
         res.sendStatus(201);
     } catch (error) {
         console.log(error);

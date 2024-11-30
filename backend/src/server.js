@@ -29,7 +29,7 @@ let vetClientes = [];
 let vetVendedores = [];
 let vetDevedores = [];
 
-server.listen(3000,() =>{console.log('servidor rodando')});
+server.listen(3001,() =>{console.log('servidor rodando')});
 
 server.post('/login', (req, res) => {
     const { username, password } = req.body;

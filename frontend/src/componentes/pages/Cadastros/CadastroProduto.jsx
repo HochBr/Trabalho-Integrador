@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Box from '@mui/material/Box';
@@ -80,7 +81,7 @@ const CadastroProduto = () => {
   };
 
   // Função para enviar os dados (Exemplo: envio para um backend)
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newErrors = {};
 
     // Valida os campos obrigatórios
@@ -93,8 +94,27 @@ const CadastroProduto = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors); // Atualiza os erros
     } else {
-      console.log('Dados do formulário:', formValues);
-      setOpenSnackbar(true); // Exibe a mensagem de sucesso
+      try {
+        const dadosProduto = {
+          id: formValues.Id_Produto,
+          nome: formValues.Nome_Produto,
+          CategoriaID: formValues.Categoria_Produto,
+          fornecedorCNPJ: formValues.Fornecedor_Produto,
+          marca: formValues.Marca_Produto,
+          valor: parseFloat(
+            formValues.Valor_Und_Produto.replace(/[^\d,-]/g, '').replace(',', '.')
+          ),
+        };
+        await axios.post('http://localhost:3001/produto', dadosProduto);
+        setOpenSnackbar(true);
+        LimpaDados();
+      } catch (error){
+        console.error ('Erro ao enviar', error);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          form: 'Erro no cadastro de produto. Tente novamente',
+        }));
+      }
     }
   };
 
