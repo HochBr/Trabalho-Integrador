@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Fornecedor (
-    CNPJ CHAR(14) PRIMARY KEY,
+    CNPJ VARCHAR(14) PRIMARY KEY,
     Nome VARCHAR(255) NOT NULL,
     Endereco VARCHAR(255),
     Email VARCHAR(255),
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS Produto (
     Valor DECIMAL(10, 2) NOT NULL,
     Marca VARCHAR(255),
     CategoriaID INT,
-    FornecedorCNPJ CHAR(14) NOT NULL,
+    FornecedorCNPJ VARCHAR(14) NOT NULL,
     FOREIGN KEY (CategoriaID) REFERENCES Categoria(ID),
     FOREIGN KEY (FornecedorCNPJ) REFERENCES Fornecedor(CNPJ)
 );

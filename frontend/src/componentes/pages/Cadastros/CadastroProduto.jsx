@@ -105,6 +105,7 @@ const CadastroProduto = () => {
             formValues.Valor_Und_Produto.replace(/[^\d,-]/g, '').replace(',', '.')
           ),
         };
+        console.log(dadosProduto);
         await axios.post('http://localhost:3001/produto', dadosProduto);
         setOpenSnackbar(true);
         LimpaDados();
