@@ -22,7 +22,7 @@ const Home = () => {
         
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <h1>CadastroV</h1>
+          <h1>Home</h1>
         </Box>
       </Box>
       
