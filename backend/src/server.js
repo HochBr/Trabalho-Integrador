@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const produtoRoutes = require('./routes/produtoRoutes');
 const categoriaRoutes = require('./routes/categoriaRoutes');
+const fornecedorRoutes = require('./routes/fornecedorRoutes');
 
 const server = express(); // constante para não perder o servidor de besteira
 server.use(cors());
@@ -13,6 +14,7 @@ server.use(express.urlencoded({extended: true}));
 
 server.use('/', produtoRoutes);
 server.use('/', categoriaRoutes);
+server.use('/', fornecedorRoutes);
 
 server.get("/test-db", async (req, res) => {
     try {
