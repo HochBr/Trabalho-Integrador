@@ -41,3 +41,18 @@ exports.excluirProduto = async (req, res) => {
         res.sendStatus(500);
     }
 }
+
+exports.editarProduto = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const {nome, valor, marca, CategoriaID, fornecedorCNPJ} = req.body;
+        console.log(`Id recebito para atualizar: ${id} `);
+        await db.none(
+            'UPDATE produto SET nome = $1, valor = $2, marca = $3, CategoriaID = $4, fornecedorCNPJ = $5 WHERE id = $6', 
+            [nome, valor, marca, CategoriaID, fornecedorCNPJ, id]);
+            res.sendStatus(200)
+    } catch (error) {
+        console.error('Erro ao remover produto', error);
+        res.sendStatus(500);
+    }
+}
