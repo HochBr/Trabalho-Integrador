@@ -29,3 +29,15 @@ exports.adicionarProduto = async(req, res) => {
         res.sendStatus(500);
     }
 }
+
+exports.excluirProduto = async (req, res) => {
+    try {
+        const {id} = req.params;
+        console.log(`ID recebido para deletar: ${id}`);
+        await db.none('DELETE FROM produto WHERE id = $1', [id]);
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('Erro ao remover produto', error);
+        res.sendStatus(500);
+    }
+}
