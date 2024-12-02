@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "run-backend": "cd backend && yarn install && cd src && node server.js",
+        "run-frontend": "cd frontend && yarn install && yarn start",
+        "run-all": "concurrently \"yarn run-backend\" \"yarn run-frontend\""
+    },
+    "devDependencies": {
+        "concurrently": "^9.1.0"
+    }
+}
