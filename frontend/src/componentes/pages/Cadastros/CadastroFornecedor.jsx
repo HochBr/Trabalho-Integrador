@@ -13,13 +13,15 @@ import MuiAlert from '@mui/material/Alert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import InputMask from 'react-input-mask';
-
+import { CleanOutlinedInput } from '../../theme/customStyles.js'
 // Estilo personalizado para o Grid
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
   flexDirection: 'column',
   marginBottom: '16px', // Espaçamento entre os campos
 }));
+
+
 
 const CadastroFornecedor = () => {
   // Estado para armazenar os valores do formulário
@@ -96,11 +98,11 @@ const CadastroFornecedor = () => {
         <Sidernav />
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Box sx={{ mt: 8 /* Margem superior ajustável */, width: '100%' }}>
+          <Box sx={{ mt: 8 /* Margem superior ajustável */, width: '100%'}}>
             <Grid container spacing={2}>
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Nome_Fornecedor">Nome do Fornecedor</FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Nome_Fornecedor"
                   name="Nome_Fornecedor"
                   type="text"
@@ -129,7 +131,7 @@ const CadastroFornecedor = () => {
                   }
                 >
                   {() => (
-                    <OutlinedInput
+                    <CleanOutlinedInput
                       id="CNPJ_Fornecedor"
                       name="CNPJ_Fornecedor"
                       type="text"
@@ -158,7 +160,7 @@ const CadastroFornecedor = () => {
                   }
                 >
                   {() => (
-                    <OutlinedInput
+                    <CleanOutlinedInput
                       id="Telefone_Fornecedor"
                       name="Telefone_Fornecedor"
                       type="text"
@@ -176,7 +178,7 @@ const CadastroFornecedor = () => {
               <FormGrid item xs={12} md={6}></FormGrid>
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Email_Fornecedor">E-mail do Fornecedor</FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Email_Fornecedor"
                   name="Email_Fornecedor"
                   type="text"
@@ -200,6 +202,7 @@ const CadastroFornecedor = () => {
                     variant="outlined"
                     startIcon={<DeleteIcon />}
                     onClick={LimpaDados}
+                    color='error'
                   >
                     Limpar
                   </Button>
@@ -207,6 +210,7 @@ const CadastroFornecedor = () => {
                     variant="contained"
                     endIcon={<SendIcon />}
                     onClick={handleSubmit}
+                    color='success'
                   >
                     Enviar
                   </Button>

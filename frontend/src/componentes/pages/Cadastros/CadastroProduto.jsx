@@ -13,6 +13,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
+import { CleanOutlinedInput } from '../../theme/customStyles.js'
 
 // Estilo personalizado para o Grid
 const FormGrid = styled(Grid)(() => ({
@@ -136,7 +137,7 @@ const CadastroProduto = () => {
             <Grid container spacing={2}>
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Id_Produto">Código do produto 📑</FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Id_Produto"
                   name="Id_Produto"
                   type="text"
@@ -154,7 +155,7 @@ const CadastroProduto = () => {
 
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Nome_Produto">Nome do Produto</FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Nome_Produto"
                   name="Nome_Produto"
                   type="text"
@@ -174,7 +175,7 @@ const CadastroProduto = () => {
                 <FormLabel htmlFor="Categoria_Produto">
                   Categoria do Produto
                 </FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Categoria_Produto"
                   name="Categoria_Produto"
                   type="text"
@@ -194,7 +195,7 @@ const CadastroProduto = () => {
                 <FormLabel htmlFor="Fornecedor_Produto">
                   Fornecedor Produto
                 </FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Fornecedor_Produto"
                   name="Fornecedor_Produto"
                   type="text"
@@ -213,7 +214,7 @@ const CadastroProduto = () => {
                 
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Marca_Produto">Marca do Produto</FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Marca_Produto"
                   name="Marca_Produto"
                   type="text"
@@ -233,7 +234,7 @@ const CadastroProduto = () => {
                 <FormLabel htmlFor="Valor_Und_Produto">
                   Valor da unidade do Produto
                 </FormLabel>
-                <OutlinedInput
+                <CleanOutlinedInput
                   id="Valor_Und_Produto"
                   name="Valor_Und_Produto"
                   type="text"
@@ -258,6 +259,7 @@ const CadastroProduto = () => {
                     variant="outlined"
                     startIcon={<DeleteIcon />}
                     onClick={LimpaDados}
+                    color='error'
                   >
                     Limpar
                   </Button>
@@ -265,6 +267,7 @@ const CadastroProduto = () => {
                     variant="contained"
                     endIcon={<SendIcon />}
                     onClick={handleSubmit}
+                    color='success'
                   >
                     Enviar
                   </Button>

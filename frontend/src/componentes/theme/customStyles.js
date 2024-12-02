@@ -1,3 +1,7 @@
+import { styled } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
+
+
 // customStyles.js
 export const listItemButtonStyles = {
     transition: 'all 0.3s ease-in-out',
@@ -28,3 +32,11 @@ export const listItemButtonStyles = {
     },
   });
   
+  export const CleanOutlinedInput = styled(OutlinedInput)(() => ({
+    borderRadius: '8px',
+    backgroundColor: '#f9f9f9',
+    '&.Mui-focused': {
+      borderColor: '#b0b0b0',
+      backgroundColor: '#ffffff',
+    },
+  }));

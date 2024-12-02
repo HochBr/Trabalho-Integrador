@@ -20,7 +20,7 @@ import RelatorioGastos from './componentes/pages/relatorios/Gastos/Gastos.jsx';
 import RelatorioVendas from './componentes/pages/relatorios/Vendas/RelatorioVendas.jsx';
 
 
-function App() {
+function App() { 
   return (
     <>
       <BrowserRouter>
@@ -31,7 +31,7 @@ function App() {
           <Route path='/cadastro-Fornecedor'  element ={<CadastroFornecedor/>}></Route>
           <Route path='/cadastro-Vendas'  element ={<CadastroVendas/>}></Route>
           <Route path='/cadastro-Produto'  element ={<CadastroProduto/>}></Route>
-          <Route path='/cadastro-cliente' element={CadastroCliente}></Route>
+          <Route path='/cadastro-cliente'  element ={<CadastroCliente/>}></Route>
 
           <Route path='/dashboard-Compras'  element ={<DashboardCompras/>}></Route>
           <Route path='/dashboard-Vendas'  element ={<DashboardVendas/>}></Route>
