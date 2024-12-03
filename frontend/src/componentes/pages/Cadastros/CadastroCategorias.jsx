@@ -73,7 +73,7 @@ const CadastroCategoria = () =>{
     } else {
       try {
         const dadosCategoria = {
-          id: formValues.Nome_Categoria,
+          nome: formValues.Nome_Categoria,
         };
         console.log(dadosCategoria);
         await axios.post('http://localhost:3001/categoria', dadosCategoria);
