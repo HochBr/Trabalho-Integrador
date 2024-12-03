@@ -12,6 +12,16 @@ exports.listarFornecedores = async (req, res) => {
     }
 }
 
+exports.listarFornecedoresNomeCNPJ = async (req, res) => {
+    try {
+        const fornecedores = await db.any('SELECT cnpj, nome FROM fornecedor');
+        res.status(200).json(fornecedores);
+    } catch (error) {
+        console.error('Erro ao listar fornecedores:', error);
+        res.sendStatus(500);
+    }
+}
+
 exports.adicionarFornecedor = async(req, res) => {
     try {
         const {cnpj, nome, endereco, email, telefone} = req.body;

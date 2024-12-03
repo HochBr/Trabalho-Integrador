@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
+import Select from '@mui/material/Select'; // Componente Select do Material-UI
+import MenuItem from '@mui/material/MenuItem'; // Componente MenuItem do Material-UI
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -38,6 +40,21 @@ const CadastroProduto = () => {
 
   // Estado para controlar o Snackbar
   const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const [fornecedores, setFornecedores] = useState([]);
+
+  useEffect(() => {
+    // Busca os fornecedores do backend ao carregar o componente
+    const fetchFornecedores = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/fornecedor');
+        setFornecedores(response.data); // Espera-se que o backend retorne uma lista de objetos com nome e CNPJ
+      } catch (error) {
+        console.error('Erro ao buscar fornecedores:', error);
+      }
+    };
+    fetchFornecedores();
+  }, []);
 
   // Limpa os dados do formulário
   const LimpaDados = () => {
@@ -195,7 +212,7 @@ const CadastroProduto = () => {
                 <FormLabel htmlFor="Fornecedor_Produto">
                   Fornecedor Produto
                 </FormLabel>
-                <CleanOutlinedInput
+                <Select
                   id="Fornecedor_Produto"
                   name="Fornecedor_Produto"
                   type="text"
@@ -203,7 +220,16 @@ const CadastroProduto = () => {
                   onChange={handleInputChange}
                   size="small"
                   error={!!errors.Fornecedor_Produto}
-                />
+                >
+                <MenuItem value = "" disabled>
+                  Selecione um fornecedor
+                </MenuItem>
+                {fornecedores.map((fornecedor) => (
+                  <MenuItem key = {fornecedor.cnpj} value = {fornecedor.cnpj}>
+                    {fornecedor.nome}
+                  </MenuItem>
+                ))}
+                </Select>
                 {errors.Fornecedor_Produto && (
                   <Typography color="error" variant="body2">
                     {errors.Fornecedor_Produto}
