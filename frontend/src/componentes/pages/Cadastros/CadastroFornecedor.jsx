@@ -69,31 +69,35 @@ const CadastroFornecedor = () => {
   // Função para enviar os dados (Exemplo: envio para um backend)
   const handleSubmit = async () => {
     const newErrors = {};
-
+  
     // Valida os campos obrigatórios
     Object.keys(formValues).forEach((field) => {
       if (!formValues[field].trim()) {
         newErrors[field] = 'Campo obrigatório!';
       }
     });
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors); // Atualiza os erros
     } else {
       try {
+        // Remove caracteres não numéricos do CNPJ
+        const cnpjLimpo = formValues.CNPJ_Fornecedor.replace(/\D/g, '');
+  
         const dadosFornecedor = {
-          cnpj: formValues.CNPJ_Fornecedor,
+          cnpj: cnpjLimpo,
           nome: formValues.Nome_Fornecedor,
           endereco: formValues.Endereco_Fornecedor,
           email: formValues.Email_Fornecedor,
           telefone: formValues.Telefone_Fornecedor,
         };
+  
         console.log(dadosFornecedor);
         await axios.post('http://localhost:3001/fornecedor', dadosFornecedor);
         setOpenSnackbar(true);
         LimpaDados();
-      } catch (error){
-        console.error ('Erro ao enviar', error);
+      } catch (error) {
+        console.error('Erro ao enviar', error);
         setErrors((prevErrors) => ({
           ...prevErrors,
           form: 'Erro no cadastro de produto. Tente novamente',
@@ -101,6 +105,7 @@ const CadastroFornecedor = () => {
       }
     }
   };
+  
 
 
   // Fechar o Snackbar
@@ -193,7 +198,23 @@ const CadastroFornecedor = () => {
                   </Typography>
                 )}
               </FormGrid>
-              <FormGrid item xs={12} md={6}></FormGrid>
+              <FormGrid item xs={12} md={6}>
+              <FormLabel htmlFor="Endereco_Fornecedor">Endereço</FormLabel>
+                <CleanOutlinedInput
+                  id="Endereco_Fornecedor"
+                  name="Endereco_Fornecedor"
+                  type="text"
+                  value={formValues.Endereco_Fornecedor}
+                  onChange={handleInputChange}
+                  size="small"
+                  error={!!errors.Endereco_Fornecedor}
+                />
+                {errors.Endereco_Fornecedor && (
+                  <Typography color="error" variant="body2">
+                    {errors.Endereco_Fornecedor}
+                  </Typography>
+                )}
+              </FormGrid>
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Email_Fornecedor">E-mail do Fornecedor</FormLabel>
                 <CleanOutlinedInput
@@ -224,6 +245,7 @@ const CadastroFornecedor = () => {
                   >
                     Limpar
                   </Button>
+
                   <Button
                     variant="contained"
                     endIcon={<SendIcon />}
