@@ -1,168 +1,273 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Sidernav from '../TelaGeral/Sidernav.jsx';
-import Navbar from '../TelaGeral/Navbar.jsx';
-import Box from '@mui/material/Box';
-import FormLabel from '@mui/material/FormLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
+import {
+  Box,
+  Grid,
+  Button,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TablePagination,
+  TableRow,
+  IconButton,
+  TextField,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Button, Typography } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import SendIcon from '@mui/icons-material/Send';
-import { CleanOutlinedInput } from '../../theme/customStyles.js'
+import Navbar from '../TelaGeral/Navbar.jsx';
+import Sidernav from '../TelaGeral/Sidernav.jsx';
 
-
-// Estilo personalizado para o Grid
 const FormGrid = styled(Grid)(() => ({
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: '16px', // Espaçamento entre os campos
-  }));
+  display: 'flex',
+  flexDirection: 'column',
+  marginBottom: '16px',
+}));
 
-const CadastroCategoria = () =>{
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
 
-    const[formValues, setFormValues] = useState({
-        Nome_Categoria: '',
-    });
-
-      // Estado para controlar os campos obrigatórios
-  const [errors, setErrors] = useState({});
-
-  // Estado para controlar o Snackbar
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  // Limpa os dados do formulário
-  const LimpaDados = () => {
-    setFormValues({
-      Nome_Categoria: '',
-    });
-    setErrors({});
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
   };
-  // Manipulador para capturar mudanças nos campos
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
+
+const CadastroCategoria = () => {
+  const [categorias, setCategorias] = useState([]);
+  const [formValues, setFormValues] = useState({ Nome_Categoria: '' });
+  const [editId, setEditId] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [errors, setErrors] = useState({});
+  const [isTableVisible, setIsTableVisible] = useState(false); // Novo estado para controlar a visibilidade da tabela
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categorias.length) : 0;
+
+  const listarCategorias = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/categoria');
+      setCategorias(response.data);
+    } catch (error) {
+      console.error('Erro ao listar categorias:', error);
+    }
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-  
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: value, // Atualiza o valor do campo correspondente
+      [name]: value,
     }));
-  
-    // Remove erro do campo preenchido
     if (errors[name]) {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }));
     }
   };
-  
-  // Função para enviar os dados (Exemplo: envio para um backend)
+
   const handleSubmit = async () => {
-    const newErrors = {};
+    if (!formValues.Nome_Categoria.trim()) {
+      setErrors({ Nome_Categoria: 'Campo obrigatório!' });
+      return;
+    }
 
-    // Valida os campos obrigatórios
-    Object.keys(formValues).forEach((field) => {
-      if (!formValues[field].trim()) {
-        newErrors[field] = 'Campo obrigatório!';
-      }
-    });
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors); // Atualiza os erros
-    } else {
-      try {
-        const dadosCategoria = {
+    try {
+      if (editId) {
+        await axios.put(`http://localhost:3001/categoria/${editId}`, {
           nome: formValues.Nome_Categoria,
-        };
-        console.log(dadosCategoria);
-        await axios.post('http://localhost:3001/categoria', dadosCategoria);
-        setOpenSnackbar(true);
-        LimpaDados();
-      } catch (error){
-        console.error ('Erro ao enviar', error);
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          form: 'Erro no cadastro de produto. Tente novamente',
-        }));
+        });
+        setEditId(null);
+      } else {
+        await axios.post('http://localhost:3001/categoria', {
+          nome: formValues.Nome_Categoria,
+        });
       }
+
+      setFormValues({ Nome_Categoria: '' });
+      listarCategorias();
+    } catch (error) {
+      console.error('Erro ao salvar categoria:', error);
     }
   };
 
-  // Fechar o Snackbar
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') return; // Evita fechar ao clicar fora
-    setOpenSnackbar(false);
+  const handleEdit = (id, nome) => {
+    setEditId(id);
+    setFormValues({ Nome_Categoria: nome });
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/categoria/${id}`);
+      listarCategorias();
+    } catch (error) {
+      console.error('Erro ao excluir categoria:', error);
+    }
+  };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-    return(
-        <div>
-            <Navbar/>
-            <Box sx={{display: 'flex'}}>
-                <Sidernav/>
-                <box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <Box sx={{ mt: 8 /* Margem superior ajustável */, width: '100%' }}>
-                        <grid container spacing={2}>
-                        <h1>Cadastro de Categorias:</h1>
-                        <FormGrid item xs={12} md={6}>
-                            <FormLabel htmlFor="Nome_Categoria">Nome da Categoria</FormLabel>
-                            <CleanOutlinedInput
-                              id="Nome_Categoria"
-                              name="Nome_Categoria"
-                              type="text"
-                              value={formValues.Nome_Categoria}
-                              onChange={handleInputChange}
-                              size="small"
-                              error={!!errors.Nome_Categoria}
-                            />
-                            {errors.Nome_Categoria && (
-                            <Typography color="error" variant="body2">
-                                {errors.Nome_Categoria}
-                            </Typography>
-                            )}
-                        </FormGrid>
-                        <FormGrid item xs={12} md={6}></FormGrid>
-                        <FormGrid item xs={12} md={7}></FormGrid>
-                        <Grid item xs={12} md={5}>
-                            <Stack direction="row" spacing={2}>
-                            <Button
-                             variant="outlined"
-                                startIcon={<DeleteIcon />}
-                                onClick={LimpaDados}
-                                color='error'
-                            >
-                                Limpar
-                            </Button>
-                            <Button
-                                variant="contained"
-                                endIcon={<SendIcon />}
-                                onClick={handleSubmit}
-                                color='success'
-                            >
-                                Enviar
-                            </Button>
-                            </Stack>
-                        </Grid>
-                        </grid>
-                    </Box>
-                </box>
-            </Box>
-            {/* Snackbar para exibir mensagens */}
-            <Snackbar
-                    open={openSnackbar}
-                    autoHideDuration={3000}
-                    onClose={handleCloseSnackbar}>
-                <MuiAlert
-                    onClose={handleCloseSnackbar}
-                    severity="success"
-                    sx={{ width: '100%' }}>
-                Produto adicionado com sucesso!
-             </MuiAlert>
-            </Snackbar>
-        </div>
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
-    );
+  const toggleTableVisibility = () => {
+    setIsTableVisible((prevState) => !prevState);
+    if (!isTableVisible) {
+      listarCategorias();
+    }
+  };
+
+  return (
+    <div>
+      <Navbar />
+      <Box sx={{ display: 'flex' }}>
+        <Sidernav />
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Box sx={{ mt: 8, width: '100%' }}>
+            <Typography variant="h4" gutterBottom>
+              Cadastro de Categorias
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <FormGrid>
+                  <Typography variant="h6">{editId ? 'Editar Categoria' : 'Cadastrar Nova Categoria'}</Typography>
+                  <TextField
+                    label="Nome da Categoria"
+                    name="Nome_Categoria"
+                    value={formValues.Nome_Categoria}
+                    onChange={handleInputChange}
+                    error={!!errors.Nome_Categoria}
+                    helperText={errors.Nome_Categoria}
+                  />
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={handleSubmit}
+                    color="primary"
+                    sx={{ mt: 2 }}
+                  >
+                    {editId ? 'Atualizar' : 'Cadastrar'}
+                  </Button>
+                </FormGrid>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  startIcon={<ListAltIcon />}
+                  onClick={toggleTableVisibility}
+                  color="secondary"
+                >
+                  {isTableVisible ? 'Ocultar Tabela' : 'Abrir Tabela'}
+                </Button>
+              </Grid>
+            </Grid>
+            {isTableVisible && ( // Renderiza a tabela apenas se estiver visível
+              <TableContainer component={Paper} sx={{ mt: 4 }}>
+                <Table sx={{ minWidth: 500 }} aria-label="Tabela de categorias">
+                  <TableBody>
+                    {(rowsPerPage > 0
+                      ? categorias.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      : categorias
+                    ).map((categoria) => (
+                      <TableRow key={categoria.id}>
+                        <TableCell>{categoria.id}</TableCell>
+                        <TableCell>{categoria.nome}</TableCell>
+                        <TableCell>
+                          <IconButton onClick={() => handleEdit(categoria.id, categoria.nome)} color="primary">
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton onClick={() => handleDelete(categoria.id)} color="secondary">
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 53 * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        colSpan={3}
+                        count={categorias.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
+            )}
+          </Box>
+        </Box>
+      </Box>
+    </div>
+  );
 };
+
 export default CadastroCategoria;
