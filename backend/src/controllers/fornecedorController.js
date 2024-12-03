@@ -6,7 +6,7 @@ exports.listarFornecedores = async (req, res) => {
         const fornecedores = await db.any('SELECT * from fornecedor');
         console.log('Retornando todos os fornecedores.');
         res.json(fornecedores).status(200);
-    } catch (error) {
+    } catch (error) { 
         console.log(error);
         res.sendStatus(400);
     }

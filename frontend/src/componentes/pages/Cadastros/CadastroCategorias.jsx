@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 
+
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -71,7 +72,7 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
-  );
+  ); 
 }
 
 const CadastroCategoria = () => {
@@ -136,6 +137,11 @@ const CadastroCategoria = () => {
   };
 
   const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Tem certeza que deseja excluir esta categoria? Não quer dar uma volta primeiro?");
+    if (!confirmDelete) {
+      return; // Se o usuário cancelar, interrompa a função
+    }
+  
     try {
       await axios.delete(`http://localhost:3001/categoria/${id}`);
       listarCategorias();
@@ -143,6 +149,7 @@ const CadastroCategoria = () => {
       console.error('Erro ao excluir categoria:', error);
     }
   };
+  
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

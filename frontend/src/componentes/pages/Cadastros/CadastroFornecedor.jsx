@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import { Button, Typography } from '@mui/material';
@@ -53,7 +53,7 @@ const CadastroFornecedor = () => {
 
   // Manipulador para capturar mudanças nos campos
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target; 
 
     setFormValues((prevValues) => ({
       ...prevValues,
@@ -67,7 +67,7 @@ const CadastroFornecedor = () => {
   };
 
   // Função para enviar os dados (Exemplo: envio para um backend)
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newErrors = {};
 
     // Valida os campos obrigatórios
@@ -80,10 +80,28 @@ const CadastroFornecedor = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors); // Atualiza os erros
     } else {
-      console.log('Dados do formulário:', formValues);
-      setOpenSnackbar(true); // Exibe a mensagem de sucesso
+      try {
+        const dadosFornecedor = {
+          cnpj: formValues.CNPJ_Fornecedor,
+          nome: formValues.Nome_Fornecedor,
+          endereco: formValues.Endereco_Fornecedor,
+          email: formValues.Email_Fornecedor,
+          telefone: formValues.Telefone_Fornecedor,
+        };
+        console.log(dadosFornecedor);
+        await axios.post('http://localhost:3001/fornecedor', dadosFornecedor);
+        setOpenSnackbar(true);
+        LimpaDados();
+      } catch (error){
+        console.error ('Erro ao enviar', error);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          form: 'Erro no cadastro de produto. Tente novamente',
+        }));
+      }
     }
   };
+
 
   // Fechar o Snackbar
   const handleCloseSnackbar = (event, reason) => {
@@ -150,7 +168,7 @@ const CadastroFornecedor = () => {
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Telefone_Fornecedor">Telefone do Fornecedor</FormLabel>
                 <InputMask
-                  mask="(99) 99999-9999"
+                  mask="(99) 9999-9999"
                   value={formValues.Telefone_Fornecedor}
                   onChange={(e) =>
                     setFormValues((prevValues) => ({
