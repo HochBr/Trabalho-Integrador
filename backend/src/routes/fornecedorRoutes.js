@@ -4,7 +4,6 @@ const protudoController = require('../controllers/fornecedorController');
 
 // Rotas
 router.get('/fornecedor', protudoController.listarFornecedores);
-router.get('/fornecedor/nomeCnpj', protudoController.listarFornecedoresNomeCNPJ);
 router.post('/fornecedor', protudoController.adicionarFornecedor);
 router.put('/fornecedor/:id', protudoController.editarFornecedor);
 router.delete('/fornecedor/:id', protudoController.excluirFornecedor);

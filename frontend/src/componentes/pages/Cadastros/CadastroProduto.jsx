@@ -43,17 +43,22 @@ const CadastroProduto = () => {
 
   const [fornecedores, setFornecedores] = useState([]);
 
+  const [categorias, setCategorias] = useState([]);
+
   useEffect(() => {
     // Busca os fornecedores do backend ao carregar o componente
-    const fetchFornecedores = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/fornecedor');
-        setFornecedores(response.data); // Espera-se que o backend retorne uma lista de objetos com nome e CNPJ
+        const fornecedoresResponse = await axios.get('http://localhost:3001/fornecedor');
+        setFornecedores(fornecedoresResponse.data);
+
+        const categoriasResponse = await axios.get('http://localhost:3001/categoria');
+        setCategorias(categoriasResponse.data);
       } catch (error) {
-        console.error('Erro ao buscar fornecedores:', error);
+        console.error('Erro ao buscar dados:', error);
       }
     };
-    fetchFornecedores();
+    fetchData();
   }, []);
 
   // Limpa os dados do formulário
@@ -101,10 +106,11 @@ const CadastroProduto = () => {
   // Função para enviar os dados (Exemplo: envio para um backend)
   const handleSubmit = async () => {
     const newErrors = {};
-
+    
     // Valida os campos obrigatórios
     Object.keys(formValues).forEach((field) => {
-      if (!formValues[field].trim()) {
+      const value = formValues[field];
+      if (!value || (typeof value === 'string' && !value.trim())) {
         newErrors[field] = 'Campo obrigatório!';
       }
     });
@@ -192,7 +198,7 @@ const CadastroProduto = () => {
                 <FormLabel htmlFor="Categoria_Produto">
                   Categoria do Produto
                 </FormLabel>
-                <CleanOutlinedInput
+                <Select
                   id="Categoria_Produto"
                   name="Categoria_Produto"
                   type="text"
@@ -200,7 +206,16 @@ const CadastroProduto = () => {
                   onChange={handleInputChange}
                   size="small"
                   error={!!errors.Categoria_Produto}
-                />
+                >
+                  <MenuItem value = "" disabled>
+                    Selecione uma categoria
+                  </MenuItem>
+                  {categorias.map((categoria) => (
+                    <MenuItem key = {categoria.id} value = {categoria.id}>
+                      {categoria.nome}
+                    </MenuItem>
+                  ))}
+                </Select>
                 {errors.Categoria_Produto && (
                   <Typography color="error" variant="body2">
                     {errors.Categoria_Produto}
