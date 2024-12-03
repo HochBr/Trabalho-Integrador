@@ -17,12 +17,12 @@ exports.adicionarCategoria = async(req, res) => {
         const {id, nome} = req.body;
         console.log(req.body);
         console.log('Query para inserção:', 
-            'INSERT INTO categoria (id, nome) VALUES ($1, $2)', 
-            [id, nome]
+            'INSERT INTO categoria (nome) VALUES ($1)', 
+            [nome]
         );
         await db.none(
-            'INSERT INTO categoria (id, nome) VALUES ($1, $2)', 
-            [id, nome]);
+            'INSERT INTO categoria (nome) VALUES ($1)', 
+            [nome]);
         res.sendStatus(201);
     } catch (error) {
         console.log(error);
