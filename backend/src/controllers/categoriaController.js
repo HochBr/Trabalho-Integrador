@@ -12,7 +12,7 @@ exports.listarCategorias = async (req, res) => {
     }
 }
 
-exports.adicionarCategoria = async(req, res) => {
+exports.adicionarCategoria = async(req, res) => { 
     try {
         const {id, nome} = req.body;
         console.log(req.body);

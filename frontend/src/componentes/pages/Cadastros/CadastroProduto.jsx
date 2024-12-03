@@ -127,7 +127,7 @@ const CadastroProduto = () => {
   };
 
   return (
-    <div>
+    <div >
       <Navbar />
       <Box sx={{ display: 'flex' }}>
         <Sidernav />
