@@ -206,6 +206,19 @@ export default function MiniDrawer() {
               <ListItemText primary="Catálogo" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
             </ListItemButton>
           </ListItem>
+           {/* Botão Fornecedores */}
+           <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              onClick={() => open && navigate('/catalogo-fornecedores')}
+              sx={listItemButtonStyle}
+            >
+              <ListItemIcon sx={{ ...listItemIconStyle, ...(open ? { mr: 3 } : { mr: 'auto' }) }}>
+                <ImportContactsIcon sx={listItemIconStyle} />
+              </ListItemIcon>
+              <ListItemText primary="Fornecedores" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
+            </ListItemButton>
+          </ListItem>
+          
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

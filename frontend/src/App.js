@@ -15,6 +15,7 @@ import DashboardVendas from './componentes/pages/DashBoards/DashBVendas.jsx';
 import Estoque from './componentes/pages/Estoque/Estoque.jsx';
 //Catalogo
 import CatalogoProdutos from './componentes/pages/catalogo/CatalgoProdutos.jsx';
+import CatalogoFornecedores from './componentes/pages/catalogo/CatalogoFornecedores.jsx';
 //Relatórios
 import RelatorioGastos from './componentes/pages/relatorios/Gastos/Gastos.jsx';
 import RelatorioVendas from './componentes/pages/relatorios/Vendas/RelatorioVendas.jsx';
@@ -39,6 +40,7 @@ function App() {
           <Route path='/estoque'  element ={<Estoque/>}></Route>
 
           <Route path='/catalogo-Produtos'  element ={<CatalogoProdutos/>}></Route>
+          <Route path='/catalogo-Fornecedores'  element ={<CatalogoFornecedores/>}></Route>
 
           <Route path='/relatorio-Gastos'  element ={<RelatorioGastos/>}></Route>
           <Route path='/relatorio-Vendas'  element ={<RelatorioVendas/>}></Route>
