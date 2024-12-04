@@ -5,7 +5,7 @@ import {
   Box, Grid, Button, Typography, Paper, 
   Table, TableBody, TableCell, TableContainer, 
   TableFooter, TablePagination, TableRow, IconButton, 
-  TextField, Dialog, DialogTitle, DialogContent, DialogActions 
+  TextField, Dialog, DialogTitle, DialogContent, DialogActions, TableHead 
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -94,11 +94,18 @@ const CatalogoProdutos = () => {
     }
   };
 
-  const handleEdit = (id, nome, marca, valor) => {
+  const handleEdit = (id, nome, marca, valor, CategoriaID, fornecedorCNPJ) => {
     setEditId(id);
-    setFormValues({ Nome_produto: nome, marca, valor });
+    setFormValues({
+      Nome_produto: nome,
+      marca,
+      valor,
+      CategoriaID ,
+      fornecedorCNPJ,
+    });
     setIsDialogOpen(true); // Abre o diálogo
   };
+  
 
   const handleDialogClose = () => {
     setEditId(null);
@@ -110,7 +117,7 @@ const CatalogoProdutos = () => {
     // Validação de campos obrigatórios
     if (!formValues.Nome_produto.trim()) {
       setErrors({ Nome_produto: 'Campo obrigatório!' });
-      return;
+      return; 
     }
   
     try {
@@ -119,7 +126,7 @@ const CatalogoProdutos = () => {
         nome: formValues.Nome_produto,
         valor: formValues.valor,
         marca: formValues.marca,
-        CategoriaID: formValues.CategoriaID || null, // Caso não exista o campo no frontend
+        CategoriaID: formValues.CategoriaID || null,
         fornecedorCNPJ: formValues.fornecedorCNPJ || null,
       });
   
@@ -160,43 +167,60 @@ const CatalogoProdutos = () => {
             </Grid>
             {isTableVisible && (
               <TableContainer component={Paper} sx={{ mt: 4 }}>
-                <Table>
-                  <TableBody>
-                    {(rowsPerPage > 0
-                      ? produto.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      : produto
-                    ).map((prod) => (
-                      <TableRow key={prod.id}>
-                        <TableCell>{prod.id}</TableCell>
-                        <TableCell>{prod.nome}</TableCell>
-                        <TableCell>{prod.marca}</TableCell>
-                        <TableCell>{prod.valor}</TableCell>
-                        <TableCell>
-                          <IconButton onClick={() => handleEdit(prod.id, prod.nome, prod.marca, prod.valor)} color="primary">
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton onClick={() => console.log('Deletar')} color="secondary">
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                  <TableFooter>
-                    <TableRow>
-                      <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        count={produto.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={(_, newPage) => setPage(newPage)}
-                        onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
-                        ActionsComponent={TablePaginationActions}
-                      />
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Nome</TableCell>
+                    <TableCell>Marca</TableCell>
+                    <TableCell>Valor</TableCell>
+                    <TableCell>Fornecedor (CNPJ)</TableCell>
+                    <TableCell>Categoria</TableCell>
+                    <TableCell>Ações</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {(rowsPerPage > 0
+                    ? produto.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : produto
+                  ).map((prod) => (
+                    <TableRow key={prod.id}>
+                      <TableCell>{prod.id}</TableCell>
+                      <TableCell>{prod.nome}</TableCell>
+                      <TableCell>{prod.marca}</TableCell>
+                      <TableCell>{prod.valor}</TableCell>
+                      <TableCell>{prod.fornecedorCNPJ || 'N/A'}</TableCell>
+                      <TableCell>{prod.categoria || 'N/A'}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() => handleEdit(prod.id, prod.nome, prod.marca, prod.valor, prod.categoria, prod.fornecedorCNPJ)}
+                          color="primary"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton onClick={() => console.log('Deletar')} color="secondary">
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
-                  </TableFooter>
-                </Table>
-              </TableContainer>
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25]}
+                      count={produto.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={(_, newPage) => setPage(newPage)}
+                      onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
+                      ActionsComponent={TablePaginationActions}
+                    />
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </TableContainer>
+            
             )}
           </Box>
         </Box>
@@ -225,11 +249,28 @@ const CatalogoProdutos = () => {
             fullWidth
           />
           <TextField
+
             margin="dense"
             label="Valor"
             name="valor"
             type="number"
             value={formValues.valor}
+            onChange={handleInputChange}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="Categoria"
+            name="CategoriaID"
+            value={formValues.CategoriaID}
+            onChange={handleInputChange}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="Fornecedor (CNPJ)"
+            name="fornecedorCNPJ"
+            value={formValues.fornecedorCNPJ}
             onChange={handleInputChange}
             fullWidth
           />
