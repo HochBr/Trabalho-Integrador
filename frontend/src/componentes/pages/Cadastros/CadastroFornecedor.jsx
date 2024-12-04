@@ -97,7 +97,7 @@ const CadastroFornecedor = () => {
         setOpenSnackbar(true);
         LimpaDados();
       } catch (error) {
-        console.error('Erro ao enviar', error);
+        console.error('Erro ao enviar', error); 
         setErrors((prevErrors) => ({
           ...prevErrors,
           form: 'Erro no cadastro de produto. Tente novamente',

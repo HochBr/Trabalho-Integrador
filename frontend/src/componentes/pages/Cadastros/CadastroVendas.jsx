@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Box from '@mui/material/Box';
@@ -150,6 +151,20 @@ const CadastroVendas = () => {
     setOpenDialog(false);
   };
 
+  useEffect(() => {
+    // Busca os produtos do backend ao carregar o componente
+    const fetchData = async () => {
+      try {
+        const produtosResponse = await axios.get('http://localhost:3001/produto');
+        setProducts(produtosResponse.data); 
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    };
+    fetchData();
+  }, []);
+  
+
 
   return (
     <div>
@@ -166,15 +181,24 @@ const CadastroVendas = () => {
                     {/* Nome do Produto e Valor lado a lado */}
                     <Grid item xs={12} sm={6}>
                       <FormLabel htmlFor="Produto">Nome do Produto</FormLabel>
-                      <CleanOutlinedInput
+                      <Select
                         id="Produto"
                         name="Produto"
                         value={currentProduct.Produto}
                         onChange={handleInputChange}
                         size="small"
                         error={!!errors.Produto}
-                        fullWidth
-                      />
+                      >
+                        <MenuItem value="" disabled>
+                          Selecione um produto
+                        </MenuItem>
+                        {products.map((produto) => (
+                          <MenuItem key={produto.id} value={produto.nome}>
+                            {produto.nome}
+                          </MenuItem>
+                        ))}
+                      </Select>
+
                       {errors.Produto && (
                         <Typography color="error" variant="body2">
                           {errors.Produto}

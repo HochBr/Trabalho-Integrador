@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
-import {  Box,Grid,Button,Typography,Paper,Table,TableBody,TableCell,TableContainer,TableFooter,TablePagination,TableRow,IconButton,TextField,} from '@mui/material';
+import { 
+  Box, Grid, Button, Typography, Paper, 
+  Table, TableBody, TableCell, TableContainer, 
+  TableFooter, TablePagination, TableRow, IconButton, 
+  TextField, Dialog, DialogTitle, DialogContent, DialogActions 
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Navbar from '../TelaGeral/Navbar.jsx';
@@ -42,32 +46,16 @@ function TablePaginationActions(props) {
 
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
+      <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label="first page">
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
+      <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="next page">
         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
+      <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="last page">
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
@@ -76,12 +64,13 @@ function TablePaginationActions(props) {
 
 const CatalogoProdutos = () => {
   const [produto, setproduto] = useState([]);
-  const [formValues, setFormValues] = useState({ Nome_produto: '' });
+  const [formValues, setFormValues] = useState({ Nome_produto: '', marca: '', valor: '' });
   const [editId, setEditId] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [errors, setErrors] = useState({});
-  const [isTableVisible, setIsTableVisible] = useState(false); // Novo estado para controlar a visibilidade da tabela
+  const [isTableVisible, setIsTableVisible] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Novo estado para o diálogo
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - produto.length) : 0;
 
@@ -105,56 +94,44 @@ const CatalogoProdutos = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleEdit = (id, nome, marca, valor) => {
+    setEditId(id);
+    setFormValues({ Nome_produto: nome, marca, valor });
+    setIsDialogOpen(true); // Abre o diálogo
+  };
+
+  const handleDialogClose = () => {
+    setEditId(null);
+    setFormValues({ Nome_produto: '', marca: '', valor: '' });
+    setIsDialogOpen(false); // Fecha o diálogo
+  };
+
+  const handleDialogSubmit = async () => {
+    // Validação de campos obrigatórios
     if (!formValues.Nome_produto.trim()) {
       setErrors({ Nome_produto: 'Campo obrigatório!' });
       return;
     }
-
+  
     try {
-      if (editId) {
-        await axios.put(`http://localhost:3001/produto/${editId}`, {
-          nome: formValues.Nome_produto,
-        });
-        setEditId(null);
-      }
-
-      setFormValues({ Nome_produto: '' });
+      // Requisição PUT para atualizar o produto no backend
+      await axios.put(`http://localhost:3001/produto/${editId}`, {
+        nome: formValues.Nome_produto,
+        valor: formValues.valor,
+        marca: formValues.marca,
+        CategoriaID: formValues.CategoriaID || null, // Caso não exista o campo no frontend
+        fornecedorCNPJ: formValues.fornecedorCNPJ || null,
+      });
+  
+      // Fecha o diálogo após atualizar e recarrega a lista de produtos
+      handleDialogClose();
       listarProdutos();
     } catch (error) {
-      console.error('Erro ao salvar produto:', error);
+      console.error('Erro ao editar produto:', error);
+      alert('Erro ao atualizar o produto. Por favor, tente novamente.');
     }
   };
-
-  const handleEdit = (id, nome) => {
-    setEditId(id);
-    setFormValues({ Nome_produto: nome });
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3001/produto/${id}`);
-      listarProdutos();
-    } catch (error) {
-      console.error('Erro ao excluir produto:', error);
-    }
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const toggleTableVisibility = () => {
-    setIsTableVisible((prevState) => !prevState);
-    if (!isTableVisible) {
-      listarProdutos();
-    }
-  };
+  
 
   return (
     <div>
@@ -168,79 +145,52 @@ const CatalogoProdutos = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <FormGrid>
-                  <Typography variant="h6">{editId ? 'Editar produto' : 'Cadastrar Nova produto'}</Typography>
-                  <TextField
-                    label="Nome da produto"
-                    name="Nome_produto"
-                    value={formValues.Nome_produto}
-                    onChange={handleInputChange}
-                    error={!!errors.Nome_produto}
-                    helperText={errors.Nome_produto}
-                  />
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={handleSubmit}
-                    color="primary"
-                    sx={{ mt: 2 }}
-                  >
-                    {editId ? 'Atualizar' : 'Cadastrar'}
-                  </Button>
-                </FormGrid>
-              </Grid>
-              <Grid item xs={12}>
                 <Button
                   variant="contained"
                   startIcon={<ListAltIcon />}
-                  onClick={toggleTableVisibility}
+                  onClick={() => {
+                    setIsTableVisible(!isTableVisible);
+                    listarProdutos();
+                  }}
                   color="secondary"
                 >
                   {isTableVisible ? 'Ocultar Tabela' : 'Abrir Tabela'}
                 </Button>
               </Grid>
             </Grid>
-            {isTableVisible && ( // Renderiza a tabela apenas se estiver visível
+            {isTableVisible && (
               <TableContainer component={Paper} sx={{ mt: 4 }}>
-                <Table sx={{ minWidth: 500 }} aria-label="Tabela de produto">
+                <Table>
                   <TableBody>
                     {(rowsPerPage > 0
                       ? produto.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       : produto
-                    ).map((produto) => (
-                      <TableRow key={produto.id}>
-                        <TableCell>{produto.id}</TableCell>
-                        <TableCell>{produto.nome}</TableCell>
-                        <TableCell>{produto.produtoID}</TableCell>
-                        <TableCell>{produto.fornecedorCNPJ}</TableCell>
-                        <TableCell>{produto.marca}</TableCell>
-                        <TableCell>{produto.valor}</TableCell>
+                    ).map((prod) => (
+                      <TableRow key={prod.id}>
+                        <TableCell>{prod.id}</TableCell>
+                        <TableCell>{prod.nome}</TableCell>
+                        <TableCell>{prod.marca}</TableCell>
+                        <TableCell>{prod.valor}</TableCell>
                         <TableCell>
-                          <IconButton onClick={() => handleEdit(produto.id, produto.nome)} color="primary">
+                          <IconButton onClick={() => handleEdit(prod.id, prod.nome, prod.marca, prod.valor)} color="primary">
                             <EditIcon />
                           </IconButton>
-                          <IconButton onClick={() => handleDelete(produto.id)} color="secondary">
+                          <IconButton onClick={() => console.log('Deletar')} color="secondary">
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>
                       </TableRow>
                     ))}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
                   </TableBody>
                   <TableFooter>
                     <TableRow>
                       <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
-                        colSpan={3}
                         count={produto.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        onPageChange={(_, newPage) => setPage(newPage)}
+                        onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
                         ActionsComponent={TablePaginationActions}
                       />
                     </TableRow>
@@ -251,6 +201,48 @@ const CatalogoProdutos = () => {
           </Box>
         </Box>
       </Box>
+
+      {/* Diálogo para edição */}
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Editar Produto</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            label="Nome do Produto"
+            name="Nome_produto"
+            value={formValues.Nome_produto}
+            onChange={handleInputChange}
+            fullWidth
+            error={!!errors.Nome_produto}
+            helperText={errors.Nome_produto}
+          />
+          <TextField
+            margin="dense"
+            label="Marca"
+            name="marca"
+            value={formValues.marca}
+            onChange={handleInputChange}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="Valor"
+            name="valor"
+            type="number"
+            value={formValues.valor}
+            onChange={handleInputChange}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleDialogSubmit} color="primary">
+            Salvar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

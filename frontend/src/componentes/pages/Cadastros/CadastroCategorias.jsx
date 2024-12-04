@@ -72,7 +72,7 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
-  ); 
+  );
 }
 
 const CadastroCategoria = () => {
