@@ -69,7 +69,7 @@ const CatalogoProdutos = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [errors, setErrors] = useState({});
-  const [isTableVisible, setIsTableVisible] = useState(false);
+  const [isTableVisible, setIsTableVisible] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Novo estado para o diálogo
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - produto.length) : 0;
@@ -152,20 +152,9 @@ const CatalogoProdutos = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  startIcon={<ListAltIcon />}
-                  onClick={() => {
-                    setIsTableVisible(!isTableVisible);
-                    listarProdutos();
-                  }}
-                  color="secondary"
-                >
-                  {isTableVisible ? 'Ocultar Tabela' : 'Abrir Tabela'}
-                </Button>
               </Grid>
             </Grid>
-            {isTableVisible && (
+            { (
               <TableContainer component={Paper} sx={{ mt: 4 }}>
               <Table>
                 <TableHead>
