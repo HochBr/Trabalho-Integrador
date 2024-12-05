@@ -7,7 +7,7 @@ import Navbar from '../TelaGeral/Navbar.jsx';
 import LineChart from './Graficos/Grafico_Linha.jsx';
 import DonutChart from './Graficos/Grafico_Donut.jsx';
 import SemiChart from './Graficos/Grafico_Semi.jsx';
-import { Grid, TextField, Button } from '@mui/material';
+import { Grid, TextField, Button, Card, CardContent } from '@mui/material';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -20,10 +20,20 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const DashboardCompras = () => {
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
+  const [indicadores, setIndicadores] = useState({
+    diaMaisVendeu: '2024-12-01',
+    diaMenosVendeu: '2024-12-02',
+    botijoesVendidos: 1500,
+  });
 
   const handleFiltro = () => {
     console.log(`Data Início: ${dataInicio}, Data Fim: ${dataFim}`);
-    // Aqui você pode aplicar os filtros nos gráficos ou chamar uma API.
+    // Aqui você pode fazer chamadas para APIs ou calcular os indicadores com base nos dados filtrados.
+    setIndicadores({
+      diaMaisVendeu: '2024-12-01',
+      diaMenosVendeu: '2024-12-02',
+      botijoesVendidos: 2000,
+    });
   };
 
   return (
@@ -66,18 +76,54 @@ const DashboardCompras = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
+
+          {/* Indicadores */}
+          <Grid container spacing={3} sx={{ marginBottom: 3 }}>
             <Grid item xs={12} md={4}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Dia que Mais Vendeu
+                  </Typography>
+                  <Typography variant="h4">{indicadores.diaMaisVendeu}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Dia que Menos Vendeu
+                  </Typography>
+                  <Typography variant="h4">{indicadores.diaMenosVendeu}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Botijões Vendidos no Período
+                  </Typography>
+                  <Typography variant="h4">{indicadores.botijoesVendidos}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          {/* Gráficos */}
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
               <Box sx={{ height: '300px' }}>
                 <LineChart />
               </Box>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <Box sx={{ height: '300px' }}>
                 <DonutChart />
               </Box>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <Box sx={{ height: '300px' }}>
                 <SemiChart />
               </Box>
