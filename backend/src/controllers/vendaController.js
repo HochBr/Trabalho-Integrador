@@ -73,10 +73,48 @@ exports.adicionarVenda = async (req, res) => {
 
 exports.excluirVenda = async (req, res) => {
     try {
-        const { id } = req.params;
-        console.log(`ID recebido para deletar: ${id}`);
-        await db.none("DELETE FROM venda WHERE id = $1", [id]);
-        res.sendStatus(200);
+        const { idvenda } = req.params;
+        console.log(`ID recebido para deletar: ${idvenda}`);
+        await db.tx(async (t) => {
+            const vendainfo = await t.oneOrNone(
+                `SELECT v.idcliente, vp.idproduto, vp.quantidade, p.valor
+                FROM venda v
+                JOIN venda_produto vp on v.id = vp.idvenda
+                JOIN produto p on vp.idproduto = p.id
+                WHERE v.id = $1`,
+                [idvenda]
+            );
+            if(!vendainfo) {
+                throw new Error(`Venda com ID ${idvenda} não encontrada`);
+            }
+
+            const {idcliente, idproduto, quantidade, valor} = vendainfo;
+
+            if(idcliente) {
+                const valortotal = valor * quantidade;
+                await t.none(
+                    `UPDATE cliente
+                    SET saldo = saldo + $1
+                    WHERE id = $2`,
+                    [valortotal, idcliente]
+                );
+            }
+            await t.none(
+                `UPDATE produto
+                SET estoque = estoque + $1
+                WHERE id = $2`,
+                [quantidade, idproduto]
+            );
+            await t.none(
+                `DELETE FROM venda_produto WHERE idvenda = $1`,
+                [idvenda]
+            );
+            await t.none(
+                `DELETE FROM venda WHERE id = $1`,
+                [idvenda]
+            );
+        });
+        res.status(200).send({message: "Venda excluída!"});
     } catch (error) {
         console.error("Erro ao remover venda", error);
         res.sendStatus(500);
