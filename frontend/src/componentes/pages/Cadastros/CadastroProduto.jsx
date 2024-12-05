@@ -120,7 +120,7 @@ const CadastroProduto = () => {
       setErrors(newErrors); // Atualiza os erros
     } else {
       try {
-        const dadosProduto = {
+        const dadosProduto = { 
           id: formValues.ID_Produto,
           nome: formValues.Nome_Produto,
           CategoriaID: formValues.Categoria_Produto,
