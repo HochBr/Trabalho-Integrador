@@ -6,7 +6,7 @@ import {
   Table, TableBody, TableCell, TableContainer,
   TableFooter, TablePagination, TableRow, IconButton,
   TextField, Dialog, DialogTitle, DialogContent, DialogActions, TableHead,
-  Select, MenuItem
+  Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
@@ -229,64 +229,83 @@ const CatalogoProdutos = () => {
               </Table>
             </TableContainer>
           </Box>
-          <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-          <DialogTitle>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography variant="h6">Editar Produto</Typography>
-                <img src={foto} alt="Produto" style={{ borderRadius: '8px' }} width={50} />
-              </Box>
-            </DialogTitle>
-            
-            <DialogContent>
-              <TextField
-                margin="dense"
-                label="Nome"
-                name="Nome_produto"
-                value={formValues.Nome_produto}
-                onChange={handleInputChange}
-                fullWidth
-                error={!!errors.Nome_produto}
-                helperText={errors.Nome_produto}
-              />
-              <TextField
-                margin="dense"
-                label="Marca"
-                name="marca"
-                value={formValues.marca}
-                onChange={handleInputChange}
-                fullWidth
-              />
-              <TextField
-                margin="dense"
-                label="Valor"
-                name="valor"
-                value={formValues.valor}
-                onChange={handleInputChange}
-                fullWidth
-              />
-              <Select
-                margin="dense"
-                label="Categoria"
-                
-                name="CategoriaID"
-                value={formValues.CategoriaID}
-                onChange={handleInputChange}
-                fullWidth
-              >
-                {categorias.map((categoria) => (
-                  <MenuItem key={categoria.id} value={categoria.id}>
-                    {categoria.nome}
-                  </MenuItem>
-                ))}
-              </Select>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleDialogClose}>Cancelar</Button>
-              <Button onClick={handleDialogSubmit} color="primary">
-                Salvar
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <Dialog open={isDialogOpen} onClose={handleDialogClose} fullWidth maxWidth="sm">
+  <DialogTitle>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+      <Typography variant="h6" fontWeight="bold">
+        Editar Produto
+      </Typography>
+      <img
+        src={foto}
+        alt="Produto"
+        style={{ borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
+        width={50}
+      />
+    </Box>
+  </DialogTitle>
+
+  <DialogContent>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2, // Espaçamento consistente entre os campos
+      }}
+    >
+      <TextField
+        margin="dense"
+        label="Nome"
+        name="Nome_produto"
+        value={formValues.Nome_produto}
+        onChange={handleInputChange}
+        fullWidth
+        error={!!errors.Nome_produto}
+        helperText={errors.Nome_produto}
+      />
+      <TextField
+        margin="dense"
+        label="Marca"
+        name="marca"
+        value={formValues.marca}
+        onChange={handleInputChange}
+        fullWidth
+      />
+      <TextField
+        margin="dense"
+        label="Valor"
+        name="valor"
+        value={formValues.valor}
+        onChange={handleInputChange}
+        fullWidth
+      />
+      <FormControl fullWidth margin="dense">
+        <InputLabel id="categoria-label">Categoria</InputLabel>
+        <Select
+          labelId="categoria-label"
+          name="CategoriaID"
+          value={formValues.CategoriaID}
+          onChange={handleInputChange}
+        >
+          {categorias.map((categoria) => (
+            <MenuItem key={categoria.id} value={categoria.id}>
+              {categoria.nome}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+  </DialogContent>
+
+  <DialogActions sx={{ justifyContent: 'flex-end', p: 2 }}>
+    <Button onClick={handleDialogClose} color="error" variant="outlined">
+      Cancelar
+    </Button>
+    <Button onClick={handleDialogSubmit} color="primary" variant="contained">
+      Salvar
+    </Button>
+  </DialogActions>
+</Dialog>
+
         </Box>
       </Box>
     </div>
