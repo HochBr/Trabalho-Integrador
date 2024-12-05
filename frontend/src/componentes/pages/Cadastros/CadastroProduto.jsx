@@ -27,7 +27,6 @@ const FormGrid = styled(Grid)(() => ({
 const CadastroProduto = () => {
   // Estado para armazenar os valores do formulário
   const [formValues, setFormValues] = useState({
-    Id_Produto: '',
     Nome_Produto: '',
     Categoria_Produto: '',
     Fornecedor_Produto: '',
@@ -64,7 +63,6 @@ const CadastroProduto = () => {
   // Limpa os dados do formulário
   const LimpaDados = () => {
     setFormValues({
-      Id_Produto: '',
       Nome_Produto: '',
       Categoria_Produto: '',
       Fornecedor_Produto: '',
@@ -120,7 +118,6 @@ const CadastroProduto = () => {
     } else {
       try {
         const dadosProduto = {
-          id: formValues.Id_Produto,
           nome: formValues.Nome_Produto,
           CategoriaID: formValues.Categoria_Produto,
           fornecedorCNPJ: formValues.Fornecedor_Produto,
@@ -158,23 +155,6 @@ const CadastroProduto = () => {
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Box sx={{ mt: 8 /* Margem superior ajustável */, width: '100%' }}>
             <Grid container spacing={2}>
-              <FormGrid item xs={12} md={6}>
-                <FormLabel htmlFor="Id_Produto">Código do produto 📑</FormLabel>
-                <CleanOutlinedInput
-                  id="Id_Produto"
-                  name="Id_Produto"
-                  type="text"
-                  value={formValues.Id_Produto}
-                  onChange={handleInputChange}
-                  size="small"
-                  error={!!errors.Id_Produto}
-                />
-                {errors.Id_Produto && (
-                  <Typography color="error" variant="body2">
-                    {errors.Id_Produto}
-                  </Typography>
-                )}
-              </FormGrid>
 
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Nome_Produto">Nome do Produto</FormLabel>
@@ -270,6 +250,7 @@ const CadastroProduto = () => {
                   </Typography>
                 )}
               </FormGrid>
+                <FormGrid item xs={12} md={6}></FormGrid>
                 <FormGrid item xs={12} md={6}></FormGrid>
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Valor_Und_Produto">
