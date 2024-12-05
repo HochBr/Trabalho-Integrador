@@ -4,7 +4,7 @@ const db = require("../config/db");
 exports.listarVendas = async (req, res) => {
     try {
         const vendas = await db.any(`
-            SELECT v.id, p.nome as "nome cliente", p.valor as "Valor unitário", 
+            SELECT v.id, p.nome as produto, p.valor as "Valor unitário", 
             vp.quantidade, v.datavenda as "Data da venda", c.nome as Cliente, 
             (vp.quantidade * p.valor) as Total 
             FROM produto p JOIN venda_produto vp on p.id = vp.idproduto 
@@ -21,15 +21,50 @@ exports.listarVendas = async (req, res) => {
 
 exports.adicionarVenda = async (req, res) => {
     try {
-        const { id, nome } = req.body;
+        const { idcliente, datavenda, idproduto, quantidade} = req.body;
         console.log(req.body);
         console.log(
             "Query para inserção:",
-            "INSERT INTO venda (nome) VALUES ($1)",
-            [nome]
+            `INSERT INTO venda (idcliente, datavenda) VALUES ($1, $2)`, 
+            [idcliente, datavenda]
         );
-        await db.none("INSERT INTO venda (nome) VALUES ($1)", [nome]);
-        res.sendStatus(201);
+        await db.tx(async (t) => {
+            const produto = await t.one(
+                `SELECT valor, estoque FROM produto WHERE id = $1`,
+                [idproduto]
+            );
+
+            if(produto.estoque < quantidade){
+                throw new Error("Estoque insuficiente");
+            }
+
+            const valortotal = produto.valor * quantidade;
+
+            const venda = await t.one(
+                `INSERT INTO venda (idcliente, datavenda) VALUES ($1, $2) RETURNING id`, 
+                [idcliente || null, datavenda]
+            );
+            if(idcliente) {
+                await t.none(
+                    `UPDATE cliente
+                    SET saldo = saldo - $1
+                    WHERE id = $2`,
+                    [valortotal, idcliente]
+                );
+            }
+            await t.none(
+                `INSERT INTO venda_produto (idproduto, idvenda, quantidade)
+                VALUES ($1, $2, $3)`,
+                [idproduto, venda.id, quantidade]
+            );
+            await t.none(
+                `UPDATE produto
+                SET estoque = estoque - $1
+                WHERE id = $2`,
+                [quantidade, idproduto]
+            );
+        });
+        res.status(201).send({message: "Venda realizada com sucesso!"});
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
