@@ -32,6 +32,7 @@ const CadastroProduto = () => {
     Fornecedor_Produto: '',
     Marca_Produto: '',
     Valor_Und_Produto: '',
+    Estoque_Produto: '',
   });
 
   // Estado para controlar os campos obrigatórios
@@ -63,11 +64,13 @@ const CadastroProduto = () => {
   // Limpa os dados do formulário
   const LimpaDados = () => {
     setFormValues({
+      ID_Produto: '',
       Nome_Produto: '',
       Categoria_Produto: '',
       Fornecedor_Produto: '',
       Marca_Produto: '',
       Valor_Und_Produto: '',
+      Estoque_Produto: '',
     });
     setErrors({});
   };
@@ -118,10 +121,12 @@ const CadastroProduto = () => {
     } else {
       try {
         const dadosProduto = {
+          id: formValues.ID_Produto,
           nome: formValues.Nome_Produto,
           CategoriaID: formValues.Categoria_Produto,
           fornecedorCNPJ: formValues.Fornecedor_Produto,
           marca: formValues.Marca_Produto,
+          estoque: formValues.Estoque_Produto,
           valor: parseFloat(
             formValues.Valor_Und_Produto.replace(/[^\d,-]/g, '').replace(',', '.')
           ),
@@ -155,6 +160,23 @@ const CadastroProduto = () => {
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Box sx={{ mt: 8 /* Margem superior ajustável */, width: '100%' }}>
             <Grid container spacing={2}>
+            <FormGrid item xs={12} md={6}>
+                <FormLabel htmlFor="ID_Produto">ID do Produto</FormLabel>
+                <CleanOutlinedInput
+                  id="ID_Produto"
+                  name="ID_Produto"
+                  type="text"
+                  value={formValues.ID_Produto}
+                  onChange={handleInputChange}
+                  size="small"
+                  error={!!errors.ID_Produto}
+                />
+                {errors.ID_Produto && (
+                  <Typography color="error" variant="body2">
+                    {errors.ID_Produto}
+                  </Typography>
+                )}
+              </FormGrid>
 
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Nome_Produto">Nome do Produto</FormLabel>
@@ -247,6 +269,23 @@ const CadastroProduto = () => {
                 {errors.Marca_Produto && (
                   <Typography color="error" variant="body2">
                     {errors.Marca_Produto}
+                  </Typography>
+                )}
+              </FormGrid>
+              <FormGrid item xs={12} md={6}>
+                <FormLabel htmlFor="Estoque_Produto">Estoque do Produto</FormLabel>
+                <CleanOutlinedInput
+                  id="Estoque_Produto"
+                  name="Estoque_Produto"
+                  type="text"
+                  value={formValues.Estoque_Produto}
+                  onChange={handleInputChange}
+                  size="small"
+                  error={!!errors.Estoque_Produto}
+                />
+                {errors.Estoque_Produto && (
+                  <Typography color="error" variant="body2">
+                    {errors.Estoque_Produto}
                   </Typography>
                 )}
               </FormGrid>
