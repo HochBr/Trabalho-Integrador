@@ -7,7 +7,7 @@ exports.listarFornecedores = async (req, res) => {
         console.log('Retornando todos os fornecedores.');
         res.json(fornecedores).status(200);
     } catch (error) { 
-        console.log(error);
+        console.log(error); 
         res.sendStatus(400);
     }
 }
