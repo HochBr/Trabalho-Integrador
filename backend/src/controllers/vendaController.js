@@ -21,30 +21,30 @@ exports.listarVendas = async (req, res) => {
 
 exports.adicionarVenda = async (req, res) => {
     try {
-        const { idcliente, datavenda, idproduto, quantidade} = req.body;
+        const { idcliente, datavenda, idproduto, quantidade } = req.body;
         console.log(req.body);
         console.log(
             "Query para inserção:",
-            `INSERT INTO venda (idcliente, datavenda) VALUES ($1, $2)`, 
+            `INSERT INTO venda (idcliente, datavenda) VALUES ($1, $2)`,
             [idcliente, datavenda]
         );
-        await db.tx(async (t) => {
+        await db.tx(async t => {
             const produto = await t.one(
                 `SELECT valor, estoque FROM produto WHERE id = $1`,
                 [idproduto]
             );
 
-            if(produto.estoque < quantidade){
+            if (produto.estoque < quantidade) {
                 throw new Error("Estoque insuficiente");
             }
 
             const valortotal = produto.valor * quantidade;
 
             const venda = await t.one(
-                `INSERT INTO venda (idcliente, datavenda) VALUES ($1, $2) RETURNING id`, 
+                `INSERT INTO venda (idcliente, datavenda) VALUES ($1, $2) RETURNING id`,
                 [idcliente || null, datavenda]
             );
-            if(idcliente) {
+            if (idcliente) {
                 await t.none(
                     `UPDATE cliente
                     SET saldo = saldo - $1
@@ -64,7 +64,7 @@ exports.adicionarVenda = async (req, res) => {
                 [quantidade, idproduto]
             );
         });
-        res.status(201).send({message: "Venda realizada com sucesso!"});
+        res.status(201).send({ message: "Venda realizada com sucesso!" });
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -75,7 +75,7 @@ exports.excluirVenda = async (req, res) => {
     try {
         const { idvenda } = req.params;
         console.log(`ID recebido para deletar: ${idvenda}`);
-        await db.tx(async (t) => {
+        await db.tx(async t => {
             const vendainfo = await t.oneOrNone(
                 `SELECT v.idcliente, vp.idproduto, vp.quantidade, p.valor
                 FROM venda v
@@ -84,13 +84,13 @@ exports.excluirVenda = async (req, res) => {
                 WHERE v.id = $1`,
                 [idvenda]
             );
-            if(!vendainfo) {
+            if (!vendainfo) {
                 throw new Error(`Venda com ID ${idvenda} não encontrada`);
             }
 
-            const {idcliente, idproduto, quantidade, valor} = vendainfo;
+            const { idcliente, idproduto, quantidade, valor } = vendainfo;
 
-            if(idcliente) {
+            if (idcliente) {
                 const valortotal = valor * quantidade;
                 await t.none(
                     `UPDATE cliente
@@ -105,16 +105,12 @@ exports.excluirVenda = async (req, res) => {
                 WHERE id = $2`,
                 [quantidade, idproduto]
             );
-            await t.none(
-                `DELETE FROM venda_produto WHERE idvenda = $1`,
-                [idvenda]
-            );
-            await t.none(
-                `DELETE FROM venda WHERE id = $1`,
-                [idvenda]
-            );
+            await t.none(`DELETE FROM venda_produto WHERE idvenda = $1`, [
+                idvenda,
+            ]);
+            await t.none(`DELETE FROM venda WHERE id = $1`, [idvenda]);
         });
-        res.status(200).send({message: "Venda excluída!"});
+        res.status(200).send({ message: "Venda excluída!" });
     } catch (error) {
         console.error("Erro ao remover venda", error);
         res.sendStatus(500);
@@ -123,13 +119,104 @@ exports.excluirVenda = async (req, res) => {
 
 exports.editarVenda = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nome, valor, marca, VendaID, fornecedorCNPJ } = req.body;
-        console.log(`Id recebito para atualizar: ${id} `);
-        await db.none("UPDATE venda SET nome = $1 WHERE id = $2", [nome, id]);
+        const { idvenda } = req.params;
+        const { idcliente, datavenda, idproduto, quantidade } = req.body;
+        console.log(`Id recebido para atualizar: ${idvenda}`);
+        await db.tx(async t => {
+            const vendainfo = await t.oneOrNone(
+                `SELECT v.idcliente, vp.idproduto, vp.quantidade, p.valor
+                 FROM venda v
+                 JOIN venda_produto vp ON v.id = vp.idvenda
+                 JOIN produto p ON vp.idproduto = p.id
+                 WHERE v.id = $1`,
+                [idvenda]
+            );
+            if (!vendainfo) {
+                throw new Error(`Venda com ID ${idvenda} não encontrada`);
+            }
+
+            const {
+                idcliente: oldCliente,
+                idproduto: oldProduto,
+                quantidade: oldQtd,
+                valor: oldValor,
+            } = vendainfo;
+            const oldTotal = oldValor * oldQtd;
+
+            let novoValor = oldValor;
+            if (oldProduto !== idproduto) {
+                const produtoInfo = await t.oneOrNone(
+                    `SELECT valor FROM produto WHERE id = $1`,
+                    [idproduto]
+                );
+                if (!produtoInfo) {
+                    throw new Error(
+                        `Produto com ID ${idproduto} não encontrado`
+                    );
+                }
+                novoValor = produtoInfo.valor;
+
+                await t.none(
+                    `UPDATE produto
+                     SET estoque = estoque + $1
+                     WHERE id = $2`,
+                    [oldQtd, oldProduto]
+                );
+            }
+
+            await t.none(
+                `UPDATE produto
+                 SET estoque = estoque - $1
+                 WHERE id = $2`,
+                [quantidade, idproduto]
+            );
+
+            const novoTotal = novoValor * quantidade;
+
+            await t.none(
+                `UPDATE venda
+                 SET idcliente = $1, datavenda = $2
+                 WHERE id = $3`,
+                [idcliente, datavenda, idvenda]
+            );
+
+            await t.none(
+                `UPDATE venda_produto
+                 SET idproduto = $1, quantidade = $2
+                 WHERE idvenda = $3`,
+                [idproduto, quantidade, idvenda]
+            );
+
+            if (oldCliente !== idcliente) {
+                if (oldCliente) {
+                    await t.none(
+                        `UPDATE cliente
+                         SET saldo = saldo + $1
+                         WHERE id = $2`,
+                        [oldTotal, oldCliente]
+                    );
+                }
+                if (idcliente) {
+                    await t.none(
+                        `UPDATE cliente
+                         SET saldo = saldo - $1
+                         WHERE id = $2`,
+                        [novoTotal, idcliente]
+                    );
+                }
+            } else if (idcliente) {
+                await t.none(
+                    `UPDATE cliente
+                     SET saldo = saldo - $1 + $2
+                     WHERE id = $3`,
+                    [oldTotal, novoTotal, idcliente]
+                );
+            }
+        });
+
         res.sendStatus(200);
     } catch (error) {
-        console.error("Erro ao remover venda", error);
+        console.error("Erro ao editar venda", error);
         res.sendStatus(500);
     }
 };
