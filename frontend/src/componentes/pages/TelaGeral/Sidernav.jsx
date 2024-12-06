@@ -156,7 +156,7 @@ export default function MiniDrawer() {
           </ListItem>
           <Collapse in={open && openDashboards} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              {['Vendas', 'Compras'].map((item) => (
+              {['Vendas'].map((item) => (
                 <ListItem key={item} disablePadding>
                   <ListItemButton
                     onClick={() => open && navigate(`/dashboard-${item.toLowerCase()}`)}

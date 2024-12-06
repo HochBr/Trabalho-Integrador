@@ -10,7 +10,6 @@ import CadastroProduto from './componentes/pages/Cadastros/CadastroProduto.jsx';
 import CadastroCategoria from './componentes/pages/Cadastros/CadastroCategorias.jsx';
 import CadastroCompra from './componentes/pages/Cadastros/CadastroCompra.jsx';
 //Dashboards
-import DashboardCompras from './componentes/pages/DashBoards/DashBCompras.jsx';
 import DashboardVendas from './componentes/pages/DashBoards/DashBVendas.jsx';
 //Estoque
 import Estoque from './componentes/pages/Estoque/Estoque.jsx';
@@ -36,7 +35,6 @@ function App() {
           <Route path='/cadastro-Categoria'  element ={<CadastroCategoria/>}></Route>
           <Route path='/cadastro-compra'  element ={<CadastroCompra/>}></Route>
 
-          <Route path='/dashboard-Compras'  element ={<DashboardCompras/>}></Route>
           <Route path='/dashboard-Vendas'  element ={<DashboardVendas/>}></Route>
 
           <Route path='/estoque'  element ={<Estoque/>}></Route>

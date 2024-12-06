@@ -49,6 +49,7 @@ const CadastroVendas = () => {
   const [fiadoInfo, setFiadoInfo] = useState({
     Nome: '',
     Contato: '',
+    Endereco: '',
   });
   const [errors, setErrors] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -372,6 +373,17 @@ const CadastroVendas = () => {
               id="Contato"
               name="Contato"
               value={fiadoInfo.Contato}
+              onChange={handleFiadoChange}
+              size="small"
+              fullWidth
+            />
+          </FormGrid>
+          <FormGrid>
+            <FormLabel htmlFor="Endereco">Endereço</FormLabel>
+            <OutlinedInput
+              id="Endereco"
+              name="Endereco"
+              value={fiadoInfo.Endereco}
               onChange={handleFiadoChange}
               size="small"
               fullWidth

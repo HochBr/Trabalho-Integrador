@@ -56,3 +56,76 @@ exports.editarProduto = async (req, res) => {
         res.sendStatus(500);
     }
 }
+
+//Para o Dashboard
+
+exports.categoriasProdutoCOUNT = async (req, res) => {
+    const { dataInicio, dataFim } = req.body; 
+    try {
+        if (!dataInicio || !dataFim) {
+            return res.status(400).json({ error: "Período de tempo não fornecido." });
+        }
+        const categorias = await db.any(
+            `SELECT c.Nome, COUNT(*) AS quantidade 
+             FROM Categoria c
+             JOIN Produto p ON c.ID = p.CategoriaID 
+             JOIN venda_produto vp ON p.ID = vp.idproduto
+             JOIN Venda v ON vp.idvenda = v.id
+             WHERE p.DataCadastro BETWEEN $1 AND $2 
+             GROUP BY c.Nome`,
+            [dataInicio, dataFim] 
+        );
+        console.log('Retornando contagem de produtos por categoria.');
+        res.status(200).json(categorias);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(400);
+    }
+};
+
+exports.getSomaVendasPorCategoria = async (req, res) => {
+    const { dataInicio, dataFim } = req.body; 
+    try {
+        if (!dataInicio || !dataFim) {
+            return res.status(400).json({ error: "Período de tempo não fornecido." });
+        }
+        const categorias = await db.any(
+            `SELECT c.Nome AS categoria, SUM(vp.quantidade) AS total_vendas 
+             FROM Categoria c
+             JOIN Produto p ON c.ID = p.CategoriaID 
+             JOIN venda_produto vp ON p.ID = vp.idproduto
+             JOIN Venda v ON vp.idvenda = v.id
+             WHERE v.datavenda BETWEEN $1 AND $2 
+             GROUP BY c.Nome
+             ORDER BY total_vendas DESC`,
+            [dataInicio, dataFim] 
+        );
+        console.log('Soma de vendas por categoria retornada com sucesso.');
+        res.status(200).json(categorias);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+};
+
+
+exports.getTotalProdutosVendidos = async (req, res) => {
+    const { dataInicio, dataFim } = req.body; 
+    try {
+        if (!dataInicio || !dataFim) {
+            return res.status(400).json({ error: "Período de tempo não fornecido." });
+        }
+        const totalProdutos = await db.any(
+            `SELECT SUM(vp.quantidade) AS total_produtos 
+             FROM venda_produto vp
+             JOIN Venda v ON vp.idvenda = v.id
+             WHERE v.datavenda BETWEEN $1 AND $2`,
+            [dataInicio, dataFim] 
+        );
+        console.log('Total de produtos vendidos no período retornado com sucesso.');
+        res.status(200).json(totalProdutos);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+};

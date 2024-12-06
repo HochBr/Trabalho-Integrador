@@ -56,3 +56,5 @@ exports.editarCategoria = async (req, res) => {
         res.sendStatus(500);
     }
 }
+
+//Para o Dashboard

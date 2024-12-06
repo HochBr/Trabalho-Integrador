@@ -4,9 +4,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { styled, useTheme } from '@mui/material/styles';
 import Navbar from '../TelaGeral/Navbar.jsx';
-import LineChart from './Graficos/Grafico_Linha.jsx';
-import DonutChart from './Graficos/Grafico_Donut.jsx';
-import SemiChart from './Graficos/Grafico_Semi.jsx';
 import { Grid, TextField, Button, Card, CardContent } from '@mui/material';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -115,17 +112,17 @@ const DashboardCompras = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Box sx={{ height: '300px' }}>
-                <LineChart />
+                
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
               <Box sx={{ height: '300px' }}>
-                <DonutChart />
+                
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
               <Box sx={{ height: '300px' }}>
-                <SemiChart />
+               
               </Box>
             </Grid>
           </Grid>
