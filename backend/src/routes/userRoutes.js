@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const { authenticateJWT, restrictAccess } = require("../middlewares/authMiddleware");
+const passport = require('passport');
 
 // Rotas
 router.get('/user', userController.listarUsuarios);

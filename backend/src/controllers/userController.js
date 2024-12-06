@@ -1,5 +1,6 @@
 //Funções CRUD para os usuarios
 const db = require('../config/db');
+const bcrypt = require('bcrypt');
 
 exports.listarUsuarios = async (req, res) => {
     try {
@@ -16,13 +17,16 @@ exports.adicionarUsuario = async(req, res) => {
     try {
         const {username, nome, senha, tipousuario} = req.body;
         console.log(req.body);
+        const saltRounds = 10
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hashedPasswd = bcrypt.hashSync(senha, salt);
         console.log('Query para inserção:', 
             'INSERT INTO usuario (username, nome, senha, tipousuario) VALUES ($1, $2, $3, $4)', 
-            [username, nome, senha, tipousuario]
+            [username, nome, hashedPasswd, tipousuario]
         );
         await db.none(
             'INSERT INTO usuario (username, nome, senha, tipousuario) VALUES ($1, $2, $3, $4)', 
-            [username, nome, senha, tipousuario]);
+            [username, nome, hashedPasswd, tipousuario]);
         res.sendStatus(201);
     } catch (error) {
         console.log(error);
@@ -46,10 +50,13 @@ exports.editarUsuario = async (req, res) => {
     try {
         const {id} = req.params;
         const {nome, senha, tipousuario} = req.body;
+        const saltRounds = 10
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hashedPasswd = bcrypt.hashSync(senha, salt);
         console.log(`Id recebito para atualizar: ${id} `);
         await db.none(
             'UPDATE usuario SET nome = $1, senha = $2, tipousuario = $3 WHERE username = $4', 
-            [nome, senha, tipousuario, id]);
+            [nome, hashedPasswd, tipousuario, id]);
             res.sendStatus(200)
     } catch (error) {
         console.error('Erro ao remover usuario', error);

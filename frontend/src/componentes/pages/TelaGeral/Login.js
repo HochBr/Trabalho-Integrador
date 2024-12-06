@@ -8,19 +8,26 @@ function Login() {
   const [senha, setSenha] = useState(""); // Estado para a senha
   const [erro, setErro] = useState(""); // Estado para a mensagem de erro
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); 
+    try {
+      const response = await fetch('http://localhost:3001/login', {
+        method: 'post',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({username: usuario, senha}),
+      });
+      if(!response.ok){
+        const data = await response.json();
+        setErro(data.message || "Usuário ou senha incorretos");
+        return;
+      }
+      const { token, user } = await response.json();
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-   
-    if (usuario === "" || senha === "") {
-      setErro("Por favor, preencha ambos os campos."); 
-    } else {
-      if(usuario === "admin" || senha === "admin"){
-        navigate("/home");
-      }
-      else{
-        setErro("Usuário e/ou Senha incorretos");
-      }
+      navigate("/home");
+    } catch{
+      setErro("Erro ao logar");
     }
     
   };
