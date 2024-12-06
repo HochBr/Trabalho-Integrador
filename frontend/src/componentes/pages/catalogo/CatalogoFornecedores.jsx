@@ -87,7 +87,7 @@ const CatalogoFornecedores = () => {
   }, []);
 
   const listarFornecedores = async () => {
-    try {
+    try { 
       const response = await axios.get('http://localhost:3001/fornecedor');
       setFornecedores(response.data);
     } catch (error) {
@@ -224,6 +224,7 @@ const CatalogoFornecedores = () => {
       {/* Diálogo para edição */}
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Editar Fornecedor</DialogTitle>
+        <img></img>
         <DialogContent>
           <TextField
             margin="dense"

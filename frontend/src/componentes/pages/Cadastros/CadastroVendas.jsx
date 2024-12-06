@@ -2,21 +2,33 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
-import Box from '@mui/material/Box';
-import FormLabel from '@mui/material/FormLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
-import { Select, Button, Typography, IconButton, Paper, Stack, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
+import {
+  Box,
+  FormLabel,
+  OutlinedInput,
+  Grid,
+  Select,
+  Button,
+  Typography,
+  IconButton,
+  Paper,
+  Stack,
+  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Snackbar,
+} from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
+import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import SendIcon from '@mui/icons-material/Send';
-import { CleanOutlinedInput } from '../../theme/customStyles.js';
 
-// Estilo personalizado para o Grid
+// Estilo personalizado para os containers
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -37,7 +49,6 @@ const CadastroVendas = () => {
   const [fiadoInfo, setFiadoInfo] = useState({
     Nome: '',
     Contato: '',
-    Total: '',
   });
   const [errors, setErrors] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -80,7 +91,7 @@ const CadastroVendas = () => {
     }
   };
 
-  // Atualizar valores globais
+  // Atualizar valores do formulário
   const handleFormChange = (event) => {
     const { name, value } = event.target;
     setFormValues((prevValues) => ({
@@ -101,15 +112,7 @@ const CadastroVendas = () => {
     setFiadoInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Limpar todos os dados
-  const LimpaDados = () => {
-    setProducts([]);
-    setCurrentProduct({ Produto: '', Valor: '', Quantidade: '' });
-    setFormValues({ Pagamento_Venda: '', Data_Venda: '' });
-    setFiadoInfo({ Nome: '', Contato: '', Total: '' });
-    setErrors({});
-  };
-
+  // Calcular total da venda
   const calcularTotalVenda = () => {
     return products.reduce(
       (total, produto) =>
@@ -138,7 +141,6 @@ const CadastroVendas = () => {
       return;
     }
 
-    // Simulação do envio dos dados
     setOpenSnackbar(true);
   };
 
@@ -151,198 +153,172 @@ const CadastroVendas = () => {
     setOpenDialog(false);
   };
 
+  // Buscar os produtos do backend
   useEffect(() => {
-    // Busca os produtos do backend ao carregar o componente
     const fetchData = async () => {
       try {
-        const produtosResponse = await axios.get('http://localhost:3001/produto');
-        setProducts(produtosResponse.data); 
+        const response = await axios.get('http://localhost:3001/produto');
+        setProducts(response.data);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       }
     };
     fetchData();
   }, []);
-  
-
 
   return (
     <div>
       <Navbar />
-      <Box sx={{ display: 'flex', mt:8 }}>
+      <Box sx={{ display: 'flex', mt: 8 }}>
         <Sidernav />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Typography variant="h5" sx={{ mb: 3 }}>
+            Cadastro de Vendas
+          </Typography>
           <Grid container spacing={2}>
-            {/* Coluna para adicionar produtos */}
             <Grid item xs={12} md={6}>
-              <Box sx={{ mt: 4 }}>
-                <FormGrid>
-                  <Grid container spacing={2}>
-                    {/* Nome do Produto e Valor lado a lado */}
-                    <Grid item xs={12} sm={6}>
-                      <FormLabel htmlFor="Produto">Nome do Produto</FormLabel>
-                      <Select
-                        id="Produto"
-                        name="Produto"
-                        value={currentProduct.Produto}
-                        onChange={handleInputChange}
-                        size="small"
-                        error={!!errors.Produto}
-                      >
-                        <MenuItem value="" disabled>
-                          Selecione um produto
-                        </MenuItem>
-                        {products.map((produto) => (
-                          <MenuItem key={produto.id} value={produto.nome}>
-                            {produto.nome}
-                          </MenuItem>
-                        ))}
-                      </Select>
-
-                      {errors.Produto && (
-                        <Typography color="error" variant="body2">
-                          {errors.Produto}
-                        </Typography>
-                      )}
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                      <FormLabel htmlFor="Valor">Valor</FormLabel>
-                      <CleanOutlinedInput
-                        id="Valor"
-                        name="Valor"
-                        value={currentProduct.Valor}
-                        onChange={handleInputChange}
-                        size="small"
-                        error={!!errors.Valor}
-                        fullWidth
-                      />
-                      {errors.Valor && (
-                        <Typography color="error" variant="body2">
-                          {errors.Valor}
-                        </Typography>
-                      )}
-                    </Grid>
-                  </Grid>
-                </FormGrid>
-
-                <FormGrid>
-                  <FormLabel htmlFor="Quantidade">Quantidade</FormLabel>
-                  <CleanOutlinedInput
-                    id="Quantidade"
-                    name="Quantidade"
-                    value={currentProduct.Quantidade}
-                    onChange={handleInputChange}
-                    size="small"
-                    error={!!errors.Quantidade}
-                    fullWidth
-                  />
-                  {errors.Quantidade && (
-                    <Typography color="error" variant="body2">
-                      {errors.Quantidade}
-                    </Typography>
-                  )}
-                </FormGrid>
-              </Box>
-            </Grid>
-          </Grid>
-          <Box sx={{ mt: 4 }}>
-            <Grid container spacing={2}>
- 
-
-              <FormGrid item xs={12} md={6}>
-                <FormLabel htmlFor="Data_Venda">Data da Venda</FormLabel>
-                <CleanOutlinedInput
-                  id="Data_Venda"
-                  name="Data_Venda"
-                  type="date"
-                  value={formValues.Data_Venda}
-                  onChange={handleFormChange}
+              <FormGrid>
+                <FormLabel htmlFor="Produto">Nome do Produto</FormLabel>
+                <Select
+                  id="Produto"
+                  name="Produto"
+                  value={currentProduct.Produto}
+                  onChange={handleInputChange}
                   size="small"
-                  error={!!errors.Data_Venda}
+                  error={!!errors.Produto}
                   fullWidth
-                />
-                {errors.Data_Venda && (
+                  displayEmpty
+                >
+                  <MenuItem value="" disabled>
+                    Selecione um produto
+                  </MenuItem>
+                  {products.map((produto) => (
+                    <MenuItem key={produto.id} value={produto.nome}>
+                      {produto.nome}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.Produto && (
                   <Typography color="error" variant="body2">
-                    {errors.Data_Venda}
+                    {errors.Produto}
                   </Typography>
                 )}
               </FormGrid>
+              <FormGrid>
+                <FormLabel htmlFor="Valor">Valor</FormLabel>
+                <OutlinedInput
+                  id="Valor"
+                  name="Valor"
+                  value={currentProduct.Valor}
+                  onChange={handleInputChange}
+                  size="small"
+                  error={!!errors.Valor}
+                  fullWidth
+                />
+                {errors.Valor && (
+                  <Typography color="error" variant="body2">
+                    {errors.Valor}
+                  </Typography>
+                )}
+              </FormGrid>
+              <FormGrid>
+                <FormLabel htmlFor="Quantidade">Quantidade</FormLabel>
+                <OutlinedInput
+                  id="Quantidade"
+                  name="Quantidade"
+                  value={currentProduct.Quantidade}
+                  onChange={handleInputChange}
+                  size="small"
+                  error={!!errors.Quantidade}
+                  fullWidth
+                />
+                {errors.Quantidade && (
+                  <Typography color="error" variant="body2">
+                    {errors.Quantidade}
+                  </Typography>
+                )}
+              </FormGrid>
+              <Button
+                startIcon={<AddShoppingCartIcon />}
+                variant="contained"
+                onClick={addProduct}
+              >
+                Adicionar Produto
+              </Button>
             </Grid>
-          </Box>
-          <Button
-            startIcon={<AddShoppingCartIcon />}
-            variant="contained"
-            onClick={addProduct}
-          >
-            Adicionar Produto
-          </Button>
-
-          {/* Coluna para exibir a lista de produtos */}
-          <Grid item xs={12} md={5}>
-            <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
-              <Typography variant="h6" gutterBottom>
-                Lista de Produtos
-              </Typography>
-              {products.length === 0 ? (
-                <Typography variant="body2" color="textSecondary">
-                  Nenhum produto adicionado ainda.
+            <Grid item xs={12} md={6}>
+              <Paper elevation={3} sx={{ p: 2 }}>
+                <Typography variant="h6" gutterBottom>
+                  Produtos Adicionados
                 </Typography>
-              ) : (
-                products.map((product, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      mb: 1,
-                      p: 1,
-                      border: '1px solid #ccc',
-                      borderRadius: 1,
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="body1">{product.Produto}</Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        R$ {product.Valor} - {product.Quantidade} unidades
-                      </Typography>
-                    </Box>
-                    <IconButton
-                      color="error"
-                      onClick={() => removeProduct(index)}
+                {products.length === 0 ? (
+                  <Typography variant="body2">Nenhum produto adicionado.</Typography>
+                ) : (
+                  products.map((product, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
                     >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                ))
-              )}
-            </Paper>
+                      <Box>
+                        <Typography>{product.Produto}</Typography>
+                        <Typography color="textSecondary">
+                          R$ {product.Valor} - {product.Quantidade} unidades
+                        </Typography>
+                      </Box>
+                      <IconButton
+                        color="error"
+                        onClick={() => removeProduct(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  ))
+                )}
+              </Paper>
+            </Grid>
           </Grid>
-          <FormGrid item xs={12} md={6}>
+          <Box sx={{ mt: 4 }}>
+            <FormGrid>
+              <FormLabel htmlFor="Data_Venda">Data da Venda</FormLabel>
+              <OutlinedInput
+                id="Data_Venda"
+                name="Data_Venda"
+                type="date"
+                value={formValues.Data_Venda}
+                onChange={handleFormChange}
+                size="small"
+                error={!!errors.Data_Venda}
+                fullWidth
+              />
+              {errors.Data_Venda && (
+                <Typography color="error" variant="body2">
+                  {errors.Data_Venda}
+                </Typography>
+              )}
+            </FormGrid>
+            <FormGrid>
               <FormLabel htmlFor="Pagamento_Venda">Forma de Pagamento</FormLabel>
               <Select
                 id="Pagamento_Venda"
                 name="Pagamento_Venda"
                 value={formValues.Pagamento_Venda}
-               onChange={handleFormChange}
+                onChange={handleFormChange}
                 size="small"
                 error={!!errors.Pagamento_Venda}
                 fullWidth
-                displayEmpty
               >
                 <MenuItem value="" disabled>
                   Selecione a forma de pagamento
                 </MenuItem>
                 <MenuItem value="Dinheiro">Dinheiro</MenuItem>
+                <MenuItem value="Cartão">Cartão</MenuItem>
                 <MenuItem value="Pix">Pix</MenuItem>
-                <MenuItem value="Cheque">Cheque</MenuItem>
-                <MenuItem value="Crédito">Cartão de Crédito</MenuItem>
-                <MenuItem value="Débito">Cartão de Débito</MenuItem>
-                <MenuItem value="Boleto">Boleto</MenuItem>
-                <MenuItem value="Drex">Drex</MenuItem>
                 <MenuItem value="Fiado">Fiado</MenuItem>
-                
               </Select>
               {errors.Pagamento_Venda && (
                 <Typography color="error" variant="body2">
@@ -350,85 +326,65 @@ const CadastroVendas = () => {
                 </Typography>
               )}
             </FormGrid>
-
-          {/* Botões de ação */}
-          <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={LimpaDados}
-              startIcon={<RemoveCircleOutlineIcon />}
-            >
-              Limpar
-            </Button>
-
-            <Button
-              variant="contained"
-              color="success"
-              onClick={handleSubmit}
-              endIcon={<SendIcon />}
-            >
-              Finalizar Venda
-            </Button>
-          </Stack>
-
-          {/* Snackbar para exibir a confirmação */}
-          <Snackbar
-            open={openSnackbar}
-            autoHideDuration={6000}
-            onClose={handleCloseSnackbar}
-          >
-            <MuiAlert
-              onClose={handleCloseSnackbar}
-              severity="success"
-              sx={{ width: '100%' }}
-            >
-              Venda realizada com sucesso!
-            </MuiAlert>
-          </Snackbar>
-
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
-            <DialogTitle>Informações de Fiado</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Preencha as informações do cliente que irá pagar fiado.
-              </DialogContentText>
-              <FormLabel htmlFor="Nome">Nome</FormLabel>
-              <OutlinedInput
-                id="Nome"
-                name="Nome"
-                value={fiadoInfo.Nome}
-                onChange={handleFiadoChange}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <FormLabel htmlFor="Contato">Contato</FormLabel>
-              <OutlinedInput
-                id="Contato"
-                name="Contato"
-                value={fiadoInfo.Contato}
-                onChange={handleFiadoChange}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <FormLabel htmlFor="Total">Total</FormLabel>
-              <OutlinedInput
-                id="Total"
-                name="Total"
-                value={calcularTotalVenda()}
-                onChange={handleFiadoChange}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog} color="primary">
-                Fechar
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="h6">Total: R$ {calcularTotalVenda()}</Typography>
+              <Button
+                endIcon={<SendIcon />}
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                Finalizar Venda
               </Button>
-            </DialogActions>
-          </Dialog>
+            </Box>
+          </Box>
         </Box>
       </Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert severity="success" sx={{ width: '100%' }}>
+          Venda registrada com sucesso!
+        </MuiAlert>
+      </Snackbar>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Informações de Fiado</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Por favor, preencha os dados do cliente para concluir a venda fiado.
+          </DialogContentText>
+          <FormGrid>
+            <FormLabel htmlFor="Nome">Nome do Cliente</FormLabel>
+            <OutlinedInput
+              id="Nome"
+              name="Nome"
+              value={fiadoInfo.Nome}
+              onChange={handleFiadoChange}
+              size="small"
+              fullWidth
+            />
+          </FormGrid>
+          <FormGrid>
+            <FormLabel htmlFor="Contato">Contato</FormLabel>
+            <OutlinedInput
+              id="Contato"
+              name="Contato"
+              value={fiadoInfo.Contato}
+              onChange={handleFiadoChange}
+              size="small"
+              fullWidth
+            />
+          </FormGrid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancelar</Button>
+          <Button variant="contained" onClick={handleCloseDialog}>
+            Salvar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
