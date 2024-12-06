@@ -13,8 +13,8 @@ exports.listarAquisicoes = async (req, res) => {
         );
         console.log('Retornando todos os aquisicoes.');
         res.json(aquisicoes).status(200);
-    } catch (error) {
-        console.log(error);
+    } catch (error) { 
+        console.log(error); 
         res.sendStatus(400);
     }
 }
