@@ -111,7 +111,7 @@ const RelatorioGastos = () => {
 
   const listargastos = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/aquisicoes'); // Endpoint ajustado
+      const response = await axios.get('http://localhost:3001/aquisicao'); // Endpoint ajustado
       setGastos(response.data);
     } catch (error) {
       console.error('Erro ao listar aquisições:', error);
@@ -133,7 +133,7 @@ const RelatorioGastos = () => {
     try {
       if (editID_Compra) {
         // Editar aquisição
-        await axios.put(`http://localhost:3001/aquisicoes/${editID_Compra}`, {
+        await axios.put(`http://localhost:3001/aquisicao/${editID_Compra}`, {
           dtcompra: formValues.dtcompra,
           idproduto: formValues.idproduto,
           quantidade: formValues.quantidade,
@@ -142,7 +142,7 @@ const RelatorioGastos = () => {
         });
       } else {
         // Adicionar nova aquisição
-        await axios.post('http://localhost:3001/aquisicoes', {
+        await axios.post('http://localhost:3001/aquisicao', {
           dtcompra: formValues.dtcompra,
           idproduto: formValues.idproduto,
           quantidade: formValues.quantidade,
@@ -162,7 +162,7 @@ const RelatorioGastos = () => {
   
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/aquisicoes/${id}`);
+      await axios.delete(`http://localhost:3001/aquisicao/${id}`);
       listargastos();
       setSnackbarDeleteOpen(true);
     } catch (error) {
