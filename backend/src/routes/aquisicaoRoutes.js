@@ -8,4 +8,4 @@ router.post('/aquisicao', aquisicaoController.adicionarAquisicao);
 router.put('/aquisicao/:id', aquisicaoController.editarAquisicao);
 router.delete('/aquisicao/:id', aquisicaoController.excluirAquisicao);
 
-module.exports = router; 
+module.exports = router;  

@@ -232,7 +232,7 @@ const CadastroProduto = () => {
                 <Select
                   id="Fornecedor_Produto"
                   name="Fornecedor_Produto"
-                  type="text"
+                  type="text" 
                   value={formValues.Fornecedor_Produto}
                   onChange={handleInputChange}
                   size="small"
