@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const protudoController = require('../controllers/fornecedorController');
+const fornecedorController = require('../controllers/fornecedorController');
 
 // Rotas
-router.get('/fornecedor', protudoController.listarFornecedores);
-router.post('/fornecedor', protudoController.adicionarFornecedor);
-router.put('/fornecedor/:id', protudoController.editarFornecedor);
-router.delete('/fornecedor/:id', protudoController.excluirFornecedor);
+router.get('/fornecedor', fornecedorController.listarFornecedores);
+router.post('/fornecedor', fornecedorController.adicionarFornecedor);
+router.put('/fornecedor/:id', fornecedorController.editarFornecedor);
+router.delete('/fornecedor/:id', fornecedorController.excluirFornecedor);
 
 module.exports = router;

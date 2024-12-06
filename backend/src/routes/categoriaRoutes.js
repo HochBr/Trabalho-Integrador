@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const protudoController = require('../controllers/categoriaController');
+const categoriaController = require('../controllers/categoriaController');
 
 // Rotas
-router.get('/categoria', protudoController.listarCategorias);
-router.post('/categoria', protudoController.adicionarCategoria);
-router.put('/categoria/:id', protudoController.editarCategoria);
-router.delete('/categoria/:id', protudoController.excluirCategoria);
+router.get('/categoria', categoriaController.listarCategorias);
+router.post('/categoria', categoriaController.adicionarCategoria);
+router.put('/categoria/:id', categoriaController.editarCategoria);
+router.delete('/categoria/:id', categoriaController.excluirCategoria);
 
 module.exports = router;

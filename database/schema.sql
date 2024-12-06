@@ -138,5 +138,5 @@ VALUES
 INSERT INTO usuario (username, nome, senha, tipousuario)
 VALUES 
 ('Administrador', 'Jedilson', '$2b$10$K1Qc.rg2Yc29nYz9PzL9cu3UhuhdxFSR51Ky64n.J.FqUiJ.sTiDe', 'Administrador'),
-('Visualizador', 'Joana Souza', '$2b$10$3y.y8oPcvSn2u1DyMPVVmeXqtT3U6bL79D7ib1p9FpoQ9/FQ6O3eS', 'Visualizador'),
+('Visualizador', 'Joana Souza', '$2b$10$3y.y8oPcvSn2u1DyMPVVmeXqtT3U6bL79D7ib1p9FpoQ9/FQ6O3eS', 'Visualizador');
 

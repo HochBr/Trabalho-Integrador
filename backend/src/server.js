@@ -7,6 +7,7 @@ const produtoRoutes = require('./routes/produtoRoutes');
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const fornecedorRoutes = require('./routes/fornecedorRoutes');
 const vendaRoutes = require('./routes/vendaRoutes');
+const aquisicaoRoutes = require('./routes/aquisicaoRoutes');
 
 const server = express(); // constante para não perder o servidor de besteira
 server.use(cors());
@@ -17,6 +18,7 @@ server.use('/', produtoRoutes);
 server.use('/', categoriaRoutes);
 server.use('/', fornecedorRoutes);
 server.use('/', vendaRoutes);
+server.use('/', aquisicaoRoutes);
 
 server.get("/test-db", async (req, res) => {
     try {

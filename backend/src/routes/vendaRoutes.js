@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const protudoController = require('../controllers/vendaController');
+const vendaController = require('../controllers/vendaController');
 
 // Rotas
-router.get('/venda', protudoController.listarVendas);
-router.post('/venda', protudoController.adicionarVenda);
-router.put('/venda/:idvenda', protudoController.editarVenda);
-router.delete('/venda/:idvenda', protudoController.excluirVenda);
+router.get('/venda', vendaController.listarVendas);
+router.post('/venda', vendaController.adicionarVenda);
+router.put('/venda/:idvenda', vendaController.editarVenda);
+router.delete('/venda/:idvenda', vendaController.excluirVenda);
 
 module.exports = router;
