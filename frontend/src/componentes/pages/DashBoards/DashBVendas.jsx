@@ -23,7 +23,7 @@ const DashboardCompras = () => {
     botijoesVendidos: '',
   });
 
-  const BASE_URL = 'http://localhost:3000'; // Substitua pelo endereço correto em produção
+  const BASE_URL = 'http://localhost:3001'; // Substitua pelo endereço correto em produção
 
   const handleFiltro = async () => {
     console.log(`Data Início: ${dataInicio}, Data Fim: ${dataFim}`);
@@ -41,9 +41,9 @@ const DashboardCompras = () => {
   
       if (responseDiaMais.ok && responseDiaMenos.ok) {
         setIndicadores({
-          diaMaisVendeu: diaMais.Dia,
-          diaMenosVendeu: diaMenos.Dia,
-          botijoesVendidos: diaMais.TotalVendido + diaMenos.TotalVendido,
+          diaMaisVendeu: diaMais.dia,
+          diaMenosVendeu: diaMenos.dia,
+          botijoesVendidos: parseInt(diaMais.totalvendido + diaMenos.totalvendido),
         });
       } else {
         console.error('Erro ao buscar dados:', { diaMais, diaMenos });
