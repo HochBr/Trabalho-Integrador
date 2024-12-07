@@ -121,7 +121,7 @@ VALUES
 -- Vendas
 INSERT INTO venda (idcliente, datavenda)
 VALUES 
-(1, '20/11/2024'),
+(1, '20/11/2024'), 
 (2, '25/11/2024'),
 (3, '30/11/2024'),
 (4, '05/12/2024');

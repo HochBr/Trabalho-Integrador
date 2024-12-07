@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
-import Select from '@mui/material/Select'; // Componente Select do Material-UI
-import MenuItem from '@mui/material/MenuItem'; // Componente MenuItem do Material-UI
+import Select from '@mui/material/Select'; 
+import MenuItem from '@mui/material/MenuItem'; 
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';

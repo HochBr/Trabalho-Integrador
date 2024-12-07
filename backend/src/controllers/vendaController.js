@@ -24,7 +24,7 @@ exports.adicionarVenda = async (req, res) => {
         const { idcliente, datavenda, idproduto, quantidade } = req.body;
         console.log(req.body);
         console.log(
-            "Query para inserção:",
+            "Query para inserção:", 
             `INSERT INTO venda (idcliente, datavenda) VALUES ($1, $2)`,
             [idcliente, datavenda]
         );

@@ -88,6 +88,7 @@ const RelatorioGastos = () => {
   useEffect(() => {
     listargastos();
   }, []);
+  const [produtos, setprodutos] = useState([]);
 
   const handleDialogClose = () => {
     setEditID_Compra(null);
@@ -111,8 +112,11 @@ const RelatorioGastos = () => {
 
   const listargastos = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/aquisicao'); // Endpoint ajustado
+      const response = await axios.get('http://localhost:3001/aquisicao');
       setGastos(response.data);
+
+      const produtosResponse = await axios.get('http://localhost:3001/produto');
+        setprodutos(produtosResponse.data);
     } catch (error) {
       console.error('Erro ao listar aquisições:', error);
     }
@@ -237,61 +241,90 @@ const RelatorioGastos = () => {
       </Box>
 
       {/* Diálogo para edição */}
-      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Editar Fornecedor</DialogTitle>
-        <img></img>
+      <Dialog open={isDialogOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          {editID_Compra ? "Editar Aquisição" : "Adicionar Nova Aquisição"}
+        </DialogTitle>
         <DialogContent>
-          <TextField
-            margin="dense"
-            label="ID_Compra"
-            name="ID_Compra"
-            type="number"
-            value={formValues.ID_Compra}
-            onChange={handleInputChange}
-            fullWidth
-            disabled
-          />
-          <TextField
-            margin="dense"
-            label="Nome do Fornecedor"
-            name="Data_Compra"
-            value={formValues.Data_Compra}
-            onChange={handleInputChange}
-            fullWidth
-            error={!!errors.Data_Compra}
-            helperText={errors.Data_Compra}
-          />
-          <TextField
-            margin="dense"
-            label="Endereço"
-            name="endereco"
-            value={formValues.endereco}
-            onChange={handleInputChange}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            label="Nome_Fornecedor"
-            name="Nome_Fornecedor"
-            value={formValues.Nome_Fornecedor}
-            onChange={handleInputChange}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            label="Quantidade"
-            name="Quantidade"
-            value={formValues.Quantidade}
-            onChange={handleInputChange}
-            fullWidth
-          />
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="ID Compra"
+                name="ID_Compra"
+                value={formValues.ID_Compra}
+                onChange={handleInputChange}
+                fullWidth
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12}>
+             <TextField
+                label="Data da Compra"
+                name="dtcompra"
+                type="date"
+                value={formValues.dtcompra}
+                onChange={handleInputChange}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.dtcompra}
+               helperText={errors.dtcompra}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="ID Produto"
+                name="idproduto"
+                value={formValues.idproduto}
+                onChange={handleInputChange}
+                fullWidth
+                error={!!errors.idproduto}
+                helperText={errors.idproduto}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Quantidade"
+                name="quantidade"
+              type="number"
+                value={formValues.quantidade}
+                onChange={handleInputChange}
+                fullWidth
+                error={!!errors.quantidade}
+                helperText={errors.quantidade}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Preço de Compra"
+                name="precocompra"
+                type="number"
+                step="0.01"
+                value={formValues.precocompra}
+                onChange={handleInputChange}
+                fullWidth
+                error={!!errors.precocompra}
+                helperText={errors.precocompra}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Data de Vencimento"
+                name="vencimento"
+                type="date"
+                value={formValues.vencimento}
+                onChange={handleInputChange}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} color="secondary">
             Cancelar
           </Button>
           <Button onClick={handleDialogSubmit} color="primary">
-            Salvar
+            {editID_Compra ? "Salvar Alterações" : "Adicionar"}
           </Button>
         </DialogActions>
       </Dialog>

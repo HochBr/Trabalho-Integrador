@@ -18,20 +18,43 @@ const DashboardCompras = () => {
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [indicadores, setIndicadores] = useState({
-    diaMaisVendeu: '2024-12-01',
-    diaMenosVendeu: '2024-12-02',
-    botijoesVendidos: 1500,
+    diaMaisVendeu: '',
+    diaMenosVendeu: '',
+    botijoesVendidos: '',
   });
 
-  const handleFiltro = () => {
+  const BASE_URL = 'http://localhost:3000'; // Substitua pelo endereço correto em produção
+
+  const handleFiltro = async () => {
     console.log(`Data Início: ${dataInicio}, Data Fim: ${dataFim}`);
-    // Aqui você pode fazer chamadas para APIs ou calcular os indicadores com base nos dados filtrados.
-    setIndicadores({
-      diaMaisVendeu: '2024-12-01',
-      diaMenosVendeu: '2024-12-02',
-      botijoesVendidos: 2000,
-    });
+  
+    try {
+      const responseDiaMais = await fetch(
+        `${BASE_URL}/produto/diamais?dataInicio=${dataInicio}&dataFim=${dataFim}`
+      );
+      const diaMais = await responseDiaMais.json();
+  
+      const responseDiaMenos = await fetch(
+        `${BASE_URL}/produto/diamenos?dataInicio=${dataInicio}&dataFim=${dataFim}`
+      );
+      const diaMenos = await responseDiaMenos.json();
+  
+      if (responseDiaMais.ok && responseDiaMenos.ok) {
+        setIndicadores({
+          diaMaisVendeu: diaMais.Dia,
+          diaMenosVendeu: diaMenos.Dia,
+          botijoesVendidos: diaMais.TotalVendido + diaMenos.TotalVendido,
+        });
+      } else {
+        console.error('Erro ao buscar dados:', { diaMais, diaMenos });
+      }
+    } catch (error) {
+      console.error('Erro na conexão com as APIs:', error);
+    }
   };
+  
+  
+  
 
   return (
     <div>

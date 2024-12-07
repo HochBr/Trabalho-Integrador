@@ -129,3 +129,64 @@ exports.getTotalProdutosVendidos = async (req, res) => {
         res.sendStatus(500);
     }
 };
+
+exports.getDiaMaisVendido = async (req, res) => {
+    const { dataInicio, dataFim } = req.query; // Mude para req.query
+    try {
+        if (!dataInicio || !dataFim) {
+            return res.status(400).json({ error: "Período de tempo não fornecido." });
+        }
+
+        const diaMaisVendido = await db.oneOrNone(
+            `SELECT v.datavenda AS Dia, SUM(vp.quantidade) AS TotalVendido
+             FROM venda AS v 
+             JOIN venda_produto AS vp ON v.id = vp.idvenda
+             WHERE v.datavenda BETWEEN $1 AND $2  
+             GROUP BY v.datavenda
+             ORDER BY TotalVendido DESC
+             LIMIT 1;`,
+            [dataInicio, dataFim]
+        );
+
+        if (!diaMaisVendido) {
+            return res.status(404).json({ error: "Nenhum dado encontrado para o período especificado." });
+        }
+
+        console.log('Dia mais vendido retornado com sucesso.');
+        res.status(200).json(diaMaisVendido);
+    } catch (error) {
+        console.error('Erro ao buscar o dia mais vendido:', error);
+        res.status(500).json({ error: "Erro interno no servidor." });
+    }
+};
+
+exports.getDiaMenosVendido = async (req, res) => {
+    const { dataInicio, dataFim } = req.query; // Mude para req.query
+    try {
+        if (!dataInicio || !dataFim) {
+            return res.status(400).json({ error: "Período de tempo não fornecido." });
+        }
+
+        const diaMenosVendido = await db.oneOrNone(
+            `SELECT v.datavenda AS Dia, SUM(vp.quantidade) AS TotalVendido
+             FROM venda AS v 
+             JOIN venda_produto AS vp ON v.id = vp.idvenda
+             WHERE v.datavenda BETWEEN $1 AND $2  
+             GROUP BY v.datavenda
+             ORDER BY TotalVendido ASC
+             LIMIT 1;`,
+            [dataInicio, dataFim]
+        );
+
+        if (!diaMenosVendido) {
+            return res.status(404).json({ error: "Nenhum dado encontrado para o período especificado." });
+        }
+
+        console.log('Dia menos vendido retornado com sucesso.');
+        res.status(200).json(diaMenosVendido);
+    } catch (error) {
+        console.error('Erro ao buscar o dia menos vendido:', error);
+        res.status(500).json({ error: "Erro interno no servidor." });
+    }
+};
+
