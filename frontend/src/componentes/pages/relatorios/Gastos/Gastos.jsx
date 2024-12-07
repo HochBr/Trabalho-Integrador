@@ -203,7 +203,15 @@ const RelatorioGastos = () => {
   {gastos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((gasto) => (
     <TableRow key={gasto.id}>
       <TableCell>{gasto.id}</TableCell>
-      <TableCell>{gasto.dtcompra}</TableCell>
+      <TableCell>
+        {gasto.dtcompra
+          ? new Date(gasto.dtcompra).toLocaleDateString('pt-BR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            })
+          : '-'}
+      </TableCell>
       <TableCell>{gasto.produto}</TableCell>
       <TableCell>{gasto.fornecedor}</TableCell>
       <TableCell>{gasto.quantidade}</TableCell>
@@ -222,23 +230,23 @@ const RelatorioGastos = () => {
   ))}
 </TableBody>
 
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    count={gastos.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={(_, newPage) => setPage(newPage)}
-                    onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
-                    ActionsComponent={TablePaginationActions}
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        </Box>
-      </Box>
+        <TableFooter>
+          <TableRow>
+             <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              count={gastos.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={(_, newPage) => setPage(newPage)}
+              onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
+  </Box>
+</Box>
 
       {/* Diálogo para edição */}
       <Dialog open={isDialogOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>

@@ -109,21 +109,22 @@ exports.getSomaVendasPorCategoria = async (req, res) => {
 };
 
 
-exports.getTotalProdutosVendidos = async (req, res) => {
-    const { dataInicio, dataFim } = req.body; 
+exports.getVendasPorTempo = async (req, res) => {
+    const { dataInicio, dataFim } = req.query;
     try {
         if (!dataInicio || !dataFim) {
             return res.status(400).json({ error: "Período de tempo não fornecido." });
         }
-        const totalProdutos = await db.any(
-            `SELECT SUM(vp.quantidade) AS total_produtos 
+        const vendas = await db.any(
+            `SELECT v.datavenda::date AS dia, SUM(vp.quantidade) AS quantidade
              FROM venda_produto vp
              JOIN Venda v ON vp.idvenda = v.id
-             WHERE v.datavenda BETWEEN $1 AND $2`,
-            [dataInicio, dataFim] 
+             WHERE v.datavenda BETWEEN $1 AND $2
+             GROUP BY v.datavenda::date
+             ORDER BY v.datavenda::date`,
+            [dataInicio, dataFim]
         );
-        console.log('Total de produtos vendidos no período retornado com sucesso.');
-        res.status(200).json(totalProdutos);
+        res.status(200).json(vendas);
     } catch (error) {
         console.error(error);
         res.sendStatus(500);
