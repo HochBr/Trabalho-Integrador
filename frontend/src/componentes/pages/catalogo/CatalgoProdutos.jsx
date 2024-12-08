@@ -94,7 +94,11 @@ const CatalogoProdutos = () => {
 
   const listarCategorias = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/categoria');
+      const response = await axios.get('http://localhost:3001/categoria', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       setCategorias(response.data);
     } catch (error) {
       console.error('Erro ao listar categorias:', error);
