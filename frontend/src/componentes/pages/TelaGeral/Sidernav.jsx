@@ -103,8 +103,15 @@ export default function MiniDrawer() {
     '&:hover': { color: '#ffffff' },
   };
 
+
+  {/*Parte do usuario */}
+  
+  let userType = localStorage.getItem('userType') || 'Visualizador';
+  userType = "";
+
+
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }}> 
       <CssBaseline />
       <Drawer
         variant="permanent"
@@ -119,30 +126,32 @@ export default function MiniDrawer() {
       >
         <Divider />
         <List>
-          {/* Botão Cadastros */}
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton onClick={handleToggleCadastros} sx={listItemButtonStyle}>
-              <ListItemIcon sx={{ ...listItemIconStyle, ...(open ? { mr: 3 } : { mr: 'auto' }) }}>
-                <EditNoteIcon sx={listItemIconStyle} />
-              </ListItemIcon>
-              <ListItemText primary="Cadastros" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
-              {open && (openCadastros ? <ExpandLess /> : <ExpandMore />)}
-            </ListItemButton>
-          </ListItem>
-          <Collapse in={open && openCadastros} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {['Produto', 'Fornecedor', 'Vendas', 'Categoria', 'Compra'].map((item) => (
-                <ListItem key={item} disablePadding>
-                  <ListItemButton
-                    onClick={() => open && navigate(`/cadastro-${item.toLowerCase()}`)}
-                    sx={{ ...listItemButtonStyle, pl: open ? 4 : 2 }}
-                  >
-                    <ListItemText primary={`Cadastro ${item}`} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Collapse>
+          {/* Botão Cadastros - Condicional para Administrador */}
+          {userType === 'Administrador' && (
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton onClick={handleToggleCadastros} sx={listItemButtonStyle}>
+                <ListItemIcon sx={{ ...listItemIconStyle, ...(open ? { mr: 3 } : { mr: 'auto' }) }}>
+                  <EditNoteIcon sx={listItemIconStyle} />
+                </ListItemIcon>
+                <ListItemText primary="Cadastros" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
+                {open && (openCadastros ? <ExpandLess /> : <ExpandMore />)}
+              </ListItemButton>
+              <Collapse in={open && openCadastros} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {['Produto', 'Fornecedor', 'Vendas', 'Categoria', 'Compra'].map((item) => (
+                    <ListItem key={item} disablePadding>
+                      <ListItemButton
+                        onClick={() => open && navigate(`/cadastro-${item.toLowerCase()}`)}
+                        sx={{ ...listItemButtonStyle, pl: open ? 4 : 2 }}
+                      >
+                        <ListItemText primary={`Cadastro ${item}`} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            </ListItem>
+          )}
 
           {/* Botão Dashboards */}
           <ListItem disablePadding sx={{ display: 'block' }}>
