@@ -132,7 +132,11 @@ const CatalogoProdutos = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Tem certeza que deseja excluir este produto?')) {
       try {
-        await axios.delete(`http://localhost:3001/produto/${id}`);
+        await axios.delete(`http://localhost:3001/produto/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         listarProdutos();
       } catch (error) {
         console.error('Erro ao excluir produto:', error);

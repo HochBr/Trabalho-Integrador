@@ -106,9 +106,18 @@ export default function MiniDrawer() {
 
   {/*Parte do usuario */}
   
-  let userType = localStorage.getItem('token');
-  userType = "Administrador";
-
+  function parseJwt(token) {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(window.atob(base64));
+    } catch (error) {
+      console.error('Token inválido', error);
+      return null;
+    }
+  }
+  
+  const userType = parseJwt(localStorage.getItem('token'))?.userType;
 
   return (
     <Box sx={{ display: 'flex' }}> 
