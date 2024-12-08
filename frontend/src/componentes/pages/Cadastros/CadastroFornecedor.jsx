@@ -93,7 +93,11 @@ const CadastroFornecedor = () => {
         };
   
         console.log(dadosFornecedor);
-        await axios.post('http://localhost:3001/fornecedor', dadosFornecedor);
+        await axios.post('http://localhost:3001/fornecedor', dadosFornecedor, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setOpenSnackbar(true);
         LimpaDados();
       } catch (error) {

@@ -50,10 +50,18 @@ const CadastroCompra = () => {
     // Busca os fornecedores do backend ao carregar o componente
     const fetchData = async () => {
       try {
-        const fornecedoresResponse = await axios.get('http://localhost:3001/fornecedor');
+        const fornecedoresResponse = await axios.get('http://localhost:3001/fornecedor', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setFornecedores(fornecedoresResponse.data);
 
-        const produtosResponse = await axios.get('http://localhost:3001/produto');
+        const produtosResponse = await axios.get('http://localhost:3001/produto', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setprodutos(produtosResponse.data);
 
 
@@ -139,7 +147,11 @@ const CadastroCompra = () => {
           vencimento: formValues.Vencimento_Compra,
         };
         console.log(dadosCompra);
-        await axios.post('http://localhost:3001/aquisicao', dadosCompra);
+        await axios.post('http://localhost:3001/aquisicao', dadosCompra, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setOpenSnackbar(true);
         LimpaDados();
       } catch (error){

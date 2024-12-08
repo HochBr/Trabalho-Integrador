@@ -166,7 +166,11 @@ const RelatorioGastos = () => {
   
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/aquisicao/${id}`);
+      await axios.delete(`http://localhost:3001/aquisicao/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       listargastos();
       setSnackbarDeleteOpen(true);
     } catch (error) {

@@ -88,7 +88,11 @@ const CadastroCategoria = () => {
 
   const listarCategorias = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/categoria');
+      const response = await axios.get('http://localhost:3001/categoria', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       setCategorias(response.data);
     } catch (error) {
       console.error('Erro ao listar categorias:', error);
@@ -116,11 +120,19 @@ const CadastroCategoria = () => {
       if (editId) {
         await axios.put(`http://localhost:3001/categoria/${editId}`, {
           nome: formValues.Nome_Categoria,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
         });
         setEditId(null);
       } else {
         await axios.post('http://localhost:3001/categoria', {
           nome: formValues.Nome_Categoria,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
         });
       }
 
@@ -143,7 +155,11 @@ const CadastroCategoria = () => {
     }
   
     try {
-      await axios.delete(`http://localhost:3001/categoria/${id}`);
+      await axios.delete(`http://localhost:3001/categoria/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       listarCategorias();
     } catch (error) {
       console.error('Erro ao excluir categoria:', error);

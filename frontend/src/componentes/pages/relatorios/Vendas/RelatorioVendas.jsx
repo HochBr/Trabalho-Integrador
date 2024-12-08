@@ -112,10 +112,18 @@ const RelatorioGastos = () => {
 
   const listargastos = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/venda'); // Endpoint ajustado
+      const response = await axios.get('http://localhost:3001/venda', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }); // Endpoint ajustado
       setGastos(response.data);
 
-      const produtosResponse = await axios.get('http://localhost:3001/produto');
+      const produtosResponse = await axios.get('http://localhost:3001/produto', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
         setprodutos(produtosResponse.data);
     } catch (error) {
       console.error('Erro ao listar aquisições:', error);
@@ -143,6 +151,10 @@ const RelatorioGastos = () => {
           quantidade: formValues.quantidade,
           precocompra: formValues.precocompra,
           vencimento: formValues.vencimento,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
         });
       } else {
         // Adicionar nova aquisição
@@ -152,6 +164,10 @@ const RelatorioGastos = () => {
           quantidade: formValues.quantidade,
           precocompra: formValues.precocompra,
           vencimento: formValues.vencimento,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
         });
       }
   
@@ -166,7 +182,11 @@ const RelatorioGastos = () => {
   
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/venda/${id}`);
+      await axios.delete(`http://localhost:3001/venda/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       listargastos();
       setSnackbarDeleteOpen(true);
     } catch (error) {

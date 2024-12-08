@@ -88,7 +88,11 @@ const CatalogoFornecedores = () => {
 
   const listarFornecedores = async () => {
     try { 
-      const response = await axios.get('http://localhost:3001/fornecedor');
+      const response = await axios.get('http://localhost:3001/fornecedor', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       setFornecedores(response.data);
     } catch (error) {
       console.error('Erro ao listar fornecedores:', error);
@@ -128,6 +132,10 @@ const CatalogoFornecedores = () => {
         endereco: formValues.endereco,
         email: formValues.email || null,
         telefone: formValues.telefone || null,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
 
       handleDialogClose();
@@ -141,7 +149,11 @@ const CatalogoFornecedores = () => {
 
   const handleDelete = async (cnpj) => {
     try {
-      await axios.delete(`http://localhost:3001/fornecedor/${cnpj}`);
+      await axios.delete(`http://localhost:3001/fornecedor/${cnpj}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       listarFornecedores();
       setSnackbarDeleteOpen(true); // Abrir Snackbar para sucesso de exclusão
     } catch (error) {

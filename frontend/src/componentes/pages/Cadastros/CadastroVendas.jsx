@@ -118,7 +118,11 @@ const CadastroVendas = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/produto');
+        const response = await axios.get('http://localhost:3001/produto', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setProdutos(response.data);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
