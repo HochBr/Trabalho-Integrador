@@ -31,7 +31,6 @@ const CadastroProduto = () => {
     Categoria_Produto: '',
     Fornecedor_Produto: '',
     Marca_Produto: '',
-    Valor_Und_Produto: '',
     Estoque_Produto: '',
   });
 
@@ -69,7 +68,6 @@ const CadastroProduto = () => {
       Categoria_Produto: '',
       Fornecedor_Produto: '',
       Marca_Produto: '',
-      Valor_Und_Produto: '',
       Estoque_Produto: '',
     });
     setErrors({});
@@ -127,9 +125,6 @@ const CadastroProduto = () => {
           fornecedorCNPJ: formValues.Fornecedor_Produto,
           marca: formValues.Marca_Produto,
           estoque: formValues.Estoque_Produto,
-          valor: parseFloat(
-            formValues.Valor_Und_Produto.replace(/[^\d,-]/g, '').replace(',', '.')
-          ),
         };
         console.log(dadosProduto);
         await axios.post('http://localhost:3001/produto', dadosProduto);

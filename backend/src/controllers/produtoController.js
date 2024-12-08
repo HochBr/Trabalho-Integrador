@@ -7,7 +7,7 @@ exports.listarProdutos = async (req, res) => {
         console.log('Retornando todos os produtos.');
         res.json(produtos).status(200);
     } catch (error) {
-        console.log(error);
+        console.log(error); 
         res.sendStatus(400);
     }
 }

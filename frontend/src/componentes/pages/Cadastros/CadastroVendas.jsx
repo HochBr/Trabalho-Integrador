@@ -86,9 +86,6 @@ const CadastroVendas = () => {
     if (!currentProduct.Produto.trim()) {
       newErrors.Produto = 'Nome do produto é obrigatório!';
     }
-    if (!currentProduct.Valor.trim()) {
-      newErrors.Valor = 'Valor é obrigatório!';
-    }
     if (!currentProduct.Quantidade.trim()) {
       newErrors.Quantidade = 'Quantidade é obrigatória!';
     }
