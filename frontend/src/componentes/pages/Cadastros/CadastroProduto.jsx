@@ -48,10 +48,18 @@ const CadastroProduto = () => {
     // Busca os fornecedores do backend ao carregar o componente
     const fetchData = async () => {
       try {
-        const fornecedoresResponse = await axios.get('http://localhost:3001/fornecedor');
+        const fornecedoresResponse = await axios.get('http://localhost:3001/fornecedor', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setFornecedores(fornecedoresResponse.data);
 
-        const categoriasResponse = await axios.get('http://localhost:3001/categoria');
+        const categoriasResponse = await axios.get('http://localhost:3001/categoria', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setCategorias(categoriasResponse.data);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
@@ -127,7 +135,11 @@ const CadastroProduto = () => {
           estoque: formValues.Estoque_Produto,
         };
         console.log(dadosProduto);
-        await axios.post('http://localhost:3001/produto', dadosProduto);
+        await axios.post('http://localhost:3001/produto', dadosProduto, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setOpenSnackbar(true);
         LimpaDados();
       } catch (error){
