@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -23,10 +23,10 @@ import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 import { useAppStore } from '../../appStore.jsx';
-import { listItemButtonStyles, listItemIconStyles, collapsedItemStyles } from '../../theme/customStyles.js';
 
 const drawerWidth = 240;
 
+// Drawer aberto
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -36,6 +36,7 @@ const openedMixin = (theme) => ({
   overflowX: 'hidden',
 });
 
+// Drawer fechado
 const closedMixin = (theme) => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -48,6 +49,7 @@ const closedMixin = (theme) => ({
   },
 });
 
+// Estilização do header
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -56,6 +58,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
+// Estilização do Drawer
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -75,17 +78,25 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const open = useAppStore((state) => state.dopen);
 
-  const [openCadastros, setOpenCadastros] = React.useState(false);
-  const [openDashboards, setOpenDashboards] = React.useState(false);
-  const [openRelatorios, setOpenRelatorios] = React.useState(false);
-  const navigate = useNavigate();
+  const [openCadastros, setOpenCadastros] = useState(false);
+  const [openDashboards, setOpenDashboards] = useState(false);
+  const [openRelatorios, setOpenRelatorios] = useState(false);
+  const [userType, setUserType] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userTypeFromStorage = localStorage.getItem('userType'); // Supondo que o tipo de usuário esteja salvo
+    setUserType(userTypeFromStorage || ''); // Atualiza o tipo de usuário
+  }, []);
 
   const handleToggleCadastros = () => setOpenCadastros(!openCadastros);
   const handleToggleDashboards = () => setOpenDashboards(!openDashboards);
   const handleToggleRelatorios = () => setOpenRelatorios(!openRelatorios);
 
+  // Estilos
   const listItemButtonStyle = {
     transition: 'all 0.3s ease-in-out',
     '&:hover': {
@@ -103,24 +114,8 @@ export default function MiniDrawer() {
     '&:hover': { color: '#ffffff' },
   };
 
-
-  {/*Parte do usuario */}
-  
-  function parseJwt(token) {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(window.atob(base64));
-    } catch (error) {
-      console.error('Token inválido', error);
-      return null;
-    }
-  }
-  
-  const userType = parseJwt(localStorage.getItem('token'))?.userType;
-
   return (
-    <Box sx={{ display: 'flex' }}> 
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Drawer
         variant="permanent"
@@ -135,7 +130,7 @@ export default function MiniDrawer() {
       >
         <Divider />
         <List>
-          {/* Botão Cadastros - Condicional para Administrador */}
+          {/* Botão Cadastros - visível apenas para Administradores */}
           {userType === 'Administrador' && (
             <ListItem disablePadding sx={{ display: 'block' }}>
               <ListItemButton onClick={handleToggleCadastros} sx={listItemButtonStyle}>
@@ -174,16 +169,14 @@ export default function MiniDrawer() {
           </ListItem>
           <Collapse in={open && openDashboards} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              {['Vendas'].map((item) => (
-                <ListItem key={item} disablePadding>
-                  <ListItemButton
-                    onClick={() => open && navigate(`/dashboard-${item.toLowerCase()}`)}
-                    sx={{ ...listItemButtonStyle, pl: open ? 4 : 2 }}
-                  >
-                    <ListItemText primary={`Dashboard ${item}`} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={() => open && navigate('/dashboard-vendas')}
+                  sx={{ ...listItemButtonStyle, pl: open ? 4 : 2 }}
+                >
+                  <ListItemText primary="Dashboard Vendas" />
+                </ListItemButton>
+              </ListItem>
             </List>
           </Collapse>
 
@@ -214,29 +207,23 @@ export default function MiniDrawer() {
 
           {/* Botão Catálogo */}
           <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              onClick={() => open && navigate('/catalogo-produtos')}
-              sx={listItemButtonStyle}
-            >
+            <ListItemButton onClick={() => open && navigate('/catalogo-produtos')} sx={listItemButtonStyle}>
               <ListItemIcon sx={{ ...listItemIconStyle, ...(open ? { mr: 3 } : { mr: 'auto' }) }}>
                 <ImportContactsIcon sx={listItemIconStyle} />
               </ListItemIcon>
               <ListItemText primary="Catálogo" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
             </ListItemButton>
           </ListItem>
-           {/* Botão Fornecedores */}
-           <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              onClick={() => open && navigate('/catalogo-fornecedores')}
-              sx={listItemButtonStyle}
-            >
+
+          {/* Botão Fornecedores */}
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton onClick={() => open && navigate('/catalogo-fornecedores')} sx={listItemButtonStyle}>
               <ListItemIcon sx={{ ...listItemIconStyle, ...(open ? { mr: 3 } : { mr: 'auto' }) }}>
                 <ImportContactsIcon sx={listItemIconStyle} />
               </ListItemIcon>
               <ListItemText primary="Fornecedores" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
             </ListItemButton>
           </ListItem>
-          
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

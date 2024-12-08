@@ -16,8 +16,8 @@ exports.listarVendas = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.sendStatus(400);
-    }
-};
+    }  
+}; 
 
 exports.adicionarVenda = async (req, res) => {
     try {

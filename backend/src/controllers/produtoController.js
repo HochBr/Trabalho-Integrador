@@ -69,7 +69,7 @@ exports.categoriasProdutoCOUNT = async (req, res) => {
             `SELECT c.Nome, COUNT(*) AS quantidade 
              FROM Categoria c
              JOIN Produto p ON c.ID = p.CategoriaID 
-             JOIN venda_produto vp ON p.ID = vp.idproduto
+             JOIN venda_produto vp ON p.ID = vp.idproduto 
              JOIN Venda v ON vp.idvenda = v.id
              WHERE p.DataCadastro BETWEEN $1 AND $2 
              GROUP BY c.Nome`,
@@ -220,6 +220,40 @@ exports.total = async (req, res) => {
     //   res.json({ total: total.totalVendido });
     } catch (error) {
       console.error('Erro ao buscar o total de vendas:', error);
+      res.status(500).json({ error: 'Erro interno no servidor.' });
+    }
+  };
+
+  //média
+  exports.media = async (req, res) => {
+    const { dataInicio, dataFim } = req.query;
+  
+    // Verifica se as datas foram fornecidas
+    if (!dataInicio || !dataFim) {
+      return res.status(400).json({ error: 'As datas de início e fim são necessárias.' });
+    }
+  
+    try {
+      // Consulta SQL para calcular a média de produtos vendidos
+      const media = await db.oneOrNone(`
+        SELECT ROUND(AVG(vp.quantidade),2) AS mediaVendido
+        FROM venda_produto vp
+        JOIN venda v ON vp.idvenda = v.id
+        WHERE v.datavenda BETWEEN $1 AND $2;
+      `, [dataInicio, dataFim]);
+  
+      console.log('Resultado da consulta:', media);
+      res.json(media);  // Verifique o que está sendo retornado aqui
+        console.log("antes do if");
+      // Verifica se o media vendido foi encontrado
+      if (!media || media.mediaVendido === null) {
+        return res.status(404).json({ message: 'Nenhum produto foi vendido neste período.' });
+      }
+      console.log("antes do media vendido");
+      // Retorna o media de produtos vendidos
+    //   res.json({ media: v.mediaVendido });
+    } catch (error) {
+      console.error('Erro ao buscar o media de vendas:', error);
       res.status(500).json({ error: 'Erro interno no servidor.' });
     }
   };

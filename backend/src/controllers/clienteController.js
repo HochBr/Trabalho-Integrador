@@ -36,7 +36,7 @@ exports.excluirCliente = async (req, res) => {
         console.log(`ID recebido para deletar: ${id}`);
         await db.none('DELETE FROM cliente WHERE id = $1', [id]);
         res.sendStatus(200);
-    } catch (error) {
+    } catch (error) { 
         console.error('Erro ao remover cliente', error);
         res.sendStatus(500);
     }

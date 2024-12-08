@@ -31,6 +31,7 @@ const FormGrid = styled(Grid)(() => ({
 
 const CadastroVendas = () => {
   const [produtos, setProdutos] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [currentProduct, setCurrentProduct] = useState({
     Produto: '',
     Quantidade: '',
@@ -39,10 +40,11 @@ const CadastroVendas = () => {
     Pagamento_Venda: '',
     Data_Venda: '',
   });
-  const [fiadoInfo, setFiadoInfo] = useState({
+  const [clienteAtual, setClienteAtual] = useState({
     Nome: '',
     Contato: '',
     Endereco: '',
+    saldo: 0,
   });
   const [errors, setErrors] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -64,7 +66,7 @@ const CadastroVendas = () => {
       ...prevValues,
       [name]: value,
     }));
-    if (name === 'Pagamento_Venda' && value === 'Fiado') {
+    if (name === 'Pagamento_Venda') {
       setOpenDialog(true);
     }
     if (errors[name]) {
@@ -75,12 +77,11 @@ const CadastroVendas = () => {
   // Atualizar informações de "Fiado"
   const handleFiadoChange = (event) => {
     const { name, value } = event.target;
-    setFiadoInfo((prev) => ({ ...prev, [name]: value }));
+    setClienteAtual((prev) => ({ ...prev, [name]: value }));
   };
 
-
   // Enviar os dados
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newErrors = {};
 
     if (!currentProduct.Produto.trim()) {
@@ -95,14 +96,73 @@ const CadastroVendas = () => {
     if (!formValues.Data_Venda.trim()) {
       newErrors.Data_Venda = 'Data da venda é obrigatória!';
     }
+    if (!currentProduct.Produto?.trim()) {
+      newErrors.Produto = 'Nome do produto é obrigatório!';
+    }
+    if (!clientes.Nome?.trim()) {
+      newErrors.Nome = 'Nome do cliente é obrigatório!';
+    }
+    
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    // Lógica para salvar a venda
-    setOpenSnackbar(true);
+    // Encontrar o produto selecionado
+    const produtoSelecionado = produtos.find(
+      (produto) => produto.nome === currentProduct.Produto
+    );
+
+    if (!produtoSelecionado) {
+      setErrors({ Produto: 'Produto inválido!' });
+      return;
+    }
+
+    // Calcular saldo do cliente (caso seja fiado)
+    const saldoAtualizado =
+      clienteAtual.saldo +
+      produtoSelecionado.valor * parseInt(currentProduct.Quantidade, 10);
+
+    // Criar ou atualizar cliente
+    if (formValues.Pagamento_Venda === 'Fiado') {
+      const DadosCliente = {
+        nome: clienteAtual.Nome,
+        endereco: clienteAtual.Endereco,
+        saldo: saldoAtualizado,
+        contato: clienteAtual.Contato,
+      };
+
+      try {
+        await axios.post('http://localhost:3001/cliente', DadosCliente, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+      } catch (error) {
+        console.error('Erro ao salvar cliente:', error);
+        return;
+      }
+    }
+
+    // Criar venda
+    const dadosVenda = {
+      idcliente: clienteAtual.Nome,
+      idproduto: produtoSelecionado.id,
+      datavenda: formValues.Data_Venda,
+      quantidade: parseInt(currentProduct.Quantidade, 10),
+    };
+
+    try {
+      await axios.post('http://localhost:3001/venda', dadosVenda, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error('Erro ao salvar venda:', error);
+    }
   };
 
   const handleCloseSnackbar = (event, reason) => {
@@ -114,22 +174,27 @@ const CadastroVendas = () => {
     setOpenDialog(false);
   };
 
-  // Buscar os produtos do backend
+  // Buscar os produtos e clientes do backend
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/produto', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+        const produtosResponse = await axios.get('http://localhost:3001/produto', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
-        setProdutos(response.data);
+        setProdutos(produtosResponse.data);
+
+        const clientesResponse = await axios.get('http://localhost:3001/cliente', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        setClientes(clientesResponse.data);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       }
     };
     fetchData();
   }, []);
+
+  
 
   return (
     <div>
@@ -252,54 +317,87 @@ const CadastroVendas = () => {
         </MuiAlert>
       </Snackbar>
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Informações de Fiado</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Por favor, preencha os dados do cliente para concluir a venda fiado.
-          </DialogContentText>
-          <FormGrid>
-            <FormLabel htmlFor="Nome">Nome do Cliente</FormLabel>
-            <OutlinedInput
-              id="Nome"
-              name="Nome"
-              value={fiadoInfo.Nome}
-              onChange={handleFiadoChange}
-              size="small"
-              fullWidth
-            />
-          </FormGrid>
-          <FormGrid>
-            <FormLabel htmlFor="Contato">Contato</FormLabel>
-            <OutlinedInput
-              id="Contato"
-              name="Contato"
-              value={fiadoInfo.Contato}
-              onChange={handleFiadoChange}
-              size="small"
-              fullWidth
-            />
-          </FormGrid>
-          <FormGrid>
-            <FormLabel htmlFor="Endereco">Endereço</FormLabel>
-            <OutlinedInput
-              id="Endereco"
-              name="Endereco"
-              value={fiadoInfo.Endereco}
-              onChange={handleFiadoChange}
-              size="small"
-              fullWidth
-            />
-          </FormGrid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">
-            Cancelar
-          </Button>
-          <Button onClick={handleCloseDialog} color="primary">
-            Salvar
-          </Button>
-        </DialogActions>
-      </Dialog>
+  <DialogTitle>Informações do Cliente</DialogTitle>
+  <DialogContent>
+    <DialogContentText>
+      Por favor, preencha os dados do cliente ou selecione um cliente existente para concluir a venda.
+    </DialogContentText>
+    <FormGrid>
+      <FormLabel htmlFor="ClienteExistente">Selecionar Cliente</FormLabel>
+      <Select
+        id="ClienteExistente"
+        name="ClienteExistente"
+        value={clientes.Nome} // Aqui assumimos que o campo "Nome" identifica o cliente
+        onChange={(e) => handleFiadoChange({ target: { name: 'Nome', value: e.target.value } })}
+        size="small"
+        fullWidth
+      >
+        <MenuItem value="" disabled>
+          Selecione um cliente
+        </MenuItem>
+        {clientes.map((cliente) => (
+          <MenuItem key={cliente.id} value={cliente.nome}>
+            {cliente.nome}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormGrid>
+    <Typography variant="subtitle2" sx={{ mt: 2, mb: 2 }}>
+      Ou crie um novo cliente:
+    </Typography>
+    <FormGrid>
+      <FormLabel htmlFor="Nome">Nome do Cliente</FormLabel>
+      <OutlinedInput
+        id="Nome"
+        name="Nome"
+        value={clientes.Nome}
+        onChange={handleFiadoChange}
+        size="small"
+        fullWidth
+      />
+    </FormGrid>
+    <FormGrid>
+      <FormLabel htmlFor="Contato">Contato</FormLabel>
+      <OutlinedInput
+        id="Contato"
+        name="Contato"
+        value={clientes.Contato}
+        onChange={handleFiadoChange}
+        size="small"
+        fullWidth
+      />
+    </FormGrid>
+    <FormGrid>
+      <FormLabel htmlFor="Endereco">Endereço</FormLabel>
+      <OutlinedInput
+        id="Endereco"
+        name="Endereco"
+        value={clientes.Endereco}
+        onChange={handleFiadoChange}
+        size="small"
+        fullWidth
+      />
+    </FormGrid>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog} color="secondary">
+      Cancelar
+    </Button>
+    <Button
+      onClick={() => {
+        if (clientes.Nome.trim()) {
+          // Função de criar cliente pode ser adicionada aqui
+          console.log('Novo cliente:', clientes);
+        }
+        handleCloseDialog();
+      }}
+      color="primary"
+    >
+      Salvar
+    </Button>
+  </DialogActions>
+</Dialog>
+
     </div>
   );
 };
