@@ -126,11 +126,13 @@ const CadastroProduto = () => {
       setErrors(newErrors); // Atualiza os erros
     } else {
       try {
+        const valorConvertido = parseFloat(formValues.Valor_Und_Produto.replace('R$', '').replace(',', '.'));
         const dadosProduto = { 
           id: formValues.ID_Produto,
           nome: formValues.Nome_Produto,
           CategoriaID: formValues.Categoria_Produto,
           fornecedorCNPJ: formValues.Fornecedor_Produto,
+          valor: valorConvertido,
           marca: formValues.Marca_Produto,
           estoque: formValues.Estoque_Produto,
         };
