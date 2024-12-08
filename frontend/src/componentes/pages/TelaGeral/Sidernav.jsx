@@ -106,8 +106,8 @@ export default function MiniDrawer() {
 
   {/*Parte do usuario */}
   
-  let userType = localStorage.getItem('userType') || 'Visualizador';
-  userType = "";
+  let userType = localStorage.getItem('token');
+  userType = "Administrador";
 
 
   return (
