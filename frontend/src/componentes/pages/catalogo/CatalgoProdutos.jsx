@@ -81,7 +81,11 @@ const CatalogoProdutos = () => {
 
   const listarProdutos = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/produto');
+      const response = await axios.get('http://localhost:3001/produto', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       setProduto(response.data);
     } catch (error) {
       console.error('Erro ao listar produtos:', error);
