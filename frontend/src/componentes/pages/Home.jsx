@@ -170,7 +170,7 @@ const Home = () => {
               <Typography
                 variant='h6'
                 fontWeight= "bold"
-                mt={3}
+                mt={6}
               >Lista de Devedores💀</Typography>
               <TableContainer component={Paper} sx={{ mt: 1 }}>
                 <Table>
