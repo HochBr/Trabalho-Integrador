@@ -168,13 +168,15 @@ const CatalogoFornecedores = () => {
       <Box sx={{ display: 'flex' }}>
         <Sidernav />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" gutterBottom mt={8}>
             Catálogo de Fornecedores
           </Typography>
+          {/* Tabela */}
           <TableContainer component={Paper} sx={{ mt: 4 }}>
             <Table>
               <TableHead>
                 <TableRow>
+                  {/* Nome das Colunas */}
                   <TableCell>CNPJ</TableCell>
                   <TableCell>Nome</TableCell>
                   <TableCell>Endereço</TableCell>
@@ -184,6 +186,7 @@ const CatalogoFornecedores = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {/* Conteudo*/}
                 {(rowsPerPage > 0
                   ? fornecedores.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   : fornecedores
@@ -312,7 +315,7 @@ const CatalogoFornecedores = () => {
         onClose={() => setSnackbarDeleteOpen(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <Alert onClose={() => setSnackbarDeleteOpen(false)} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={() => setSnackbarDeleteOpen(false)} severity="error" sx={{ width: '100%' }}>
           Fornecedor excluído com sucesso!
         </Alert>
       </Snackbar>

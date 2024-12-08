@@ -1,3 +1,4 @@
+// video indiano, funciona então NÃO mexe
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 

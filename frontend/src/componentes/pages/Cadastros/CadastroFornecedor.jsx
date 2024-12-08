@@ -126,6 +126,7 @@ const CadastroFornecedor = () => {
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Box sx={{ mt: 8 /* Margem superior ajustável */, width: '100%'}}>
+          {/*Fornecedor*/}
             <Grid container spacing={2}>
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Nome_Fornecedor">Nome do Fornecedor</FormLabel>
@@ -144,7 +145,7 @@ const CadastroFornecedor = () => {
                   </Typography>
                 )}
               </FormGrid>
-
+                {/*CNPJ*/}
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="CNPJ_Fornecedor">CNPJ do Fornecedor</FormLabel>
                 <InputMask
@@ -173,7 +174,7 @@ const CadastroFornecedor = () => {
                   </Typography>
                 )}
               </FormGrid>
-
+                {/*Numero de telefone*/}
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Telefone_Fornecedor">Telefone do Fornecedor</FormLabel>
                 <InputMask
@@ -203,6 +204,7 @@ const CadastroFornecedor = () => {
                 )}
               </FormGrid>
               <FormGrid item xs={12} md={6}>
+                {/*Endereço*/}
               <FormLabel htmlFor="Endereco_Fornecedor">Endereço</FormLabel>
                 <CleanOutlinedInput
                   id="Endereco_Fornecedor"
@@ -219,6 +221,7 @@ const CadastroFornecedor = () => {
                   </Typography>
                 )}
               </FormGrid>
+              {/*E-mail*/}
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Email_Fornecedor">E-mail do Fornecedor</FormLabel>
                 <CleanOutlinedInput
@@ -238,7 +241,7 @@ const CadastroFornecedor = () => {
                 )}
               </FormGrid>
               <FormGrid item xs={12} md={7}></FormGrid>
-
+                {/*Botões*/}
               <Grid item xs={12} md={5}>
                 <Stack direction="row" spacing={2}>
                   <Button

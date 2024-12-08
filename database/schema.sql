@@ -79,6 +79,18 @@ VALUES
 ('12345678000101', 'Fornecedor A', 'Rua Central, 123', 'contato@fornecedorA.com', '11987654321'),
 ('98765432000199', 'Fornecedor B', 'Avenida Sul, 456', 'contato@fornecedorB.com', '11912345678'),
 ('32165487000133', 'Fornecedor C', 'Praça Norte, 789', 'contato@fornecedorC.com', '11965498732');
+('63334354000192', 'Fornecedor A', 'Rua Central, 123', 'contato@fornecedorA.com', '11987654321'),
+('75030375000101', 'Fornecedor B', 'Avenida Sul, 456', 'contato@fornecedorB.com', '11912345678'),
+('70615587000129', 'Fornecedor C', 'Praça Norte, 789', 'contato@fornecedorC.com', '11965498732');
+('59702799000100', 'Fornecedor A', 'Rua Central, 123', 'contato@fornecedorA.com', '11987654321'),
+('98765432000199', 'Fornecedor B', 'Avenida Sul, 456', 'contato@fornecedorB.com', '11912345678'),
+('32165487000133', 'Fornecedor C', 'Praça Norte, 789', 'contato@fornecedorC.com', '11965498732');
+('12345678000101', 'Fornecedor A', 'Rua Central, 123', 'contato@fornecedorA.com', '11987654321'),
+('98765432000199', 'Fornecedor B', 'Avenida Sul, 456', 'contato@fornecedorB.com', '11912345678'),
+('32165487000133', 'Fornecedor C', 'Praça Norte, 789', 'contato@fornecedorC.com', '11965498732');
+('12345678000101', 'Fornecedor A', 'Rua Central, 123', 'contato@fornecedorA.com', '11987654321'),
+('98765432000199', 'Fornecedor B', 'Avenida Sul, 456', 'contato@fornecedorB.com', '11912345678'),
+('32165487000133', 'Fornecedor C', 'Praça Norte, 789', 'contato@fornecedorC.com', '11965498732');
 
 -- Categorias
 INSERT INTO categoria (Nome)

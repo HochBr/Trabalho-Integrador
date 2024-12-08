@@ -83,7 +83,7 @@ const CadastroVendas = () => {
   // Enviar os dados
   const handleSubmit = async () => {
     const newErrors = {};
-
+    //Algum desses trim de merda que estão dando erro
     if (!currentProduct.Produto.trim()) {
       newErrors.Produto = 'Nome do produto é obrigatório!';
     }
@@ -102,7 +102,8 @@ const CadastroVendas = () => {
     if (!clientes.Nome?.trim()) {
       newErrors.Nome = 'Nome do cliente é obrigatório!';
     }
-    
+    //contato
+    //endereço
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -125,7 +126,7 @@ const CadastroVendas = () => {
       produtoSelecionado.valor * parseInt(currentProduct.Quantidade, 10);
 
     // Criar ou atualizar cliente
-    if (formValues.Pagamento_Venda === 'Fiado') {
+    if (formValues.Pagamento_Venda) {
       const DadosCliente = {
         nome: clienteAtual.Nome,
         endereco: clienteAtual.Endereco,
@@ -208,6 +209,7 @@ const CadastroVendas = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <FormGrid>
+                {/* Pega do banco o nome do produto */}
                 <FormLabel htmlFor="Produto">Nome do Produto</FormLabel>
                 <Select
                   id="Produto"
@@ -233,6 +235,7 @@ const CadastroVendas = () => {
                 )}
               </FormGrid>
 
+                {/* Quantidade */}
               <FormGrid>
                 <FormLabel htmlFor="Quantidade">Quantidade</FormLabel>
                 <OutlinedInput
@@ -253,6 +256,7 @@ const CadastroVendas = () => {
             </Grid>
           </Grid>
           <Box sx={{ mt: 4 }}>
+            {/* Data da venda */}
             <FormGrid>
               <FormLabel htmlFor="Data_Venda">Data da Venda</FormLabel>
               <OutlinedInput
@@ -271,6 +275,7 @@ const CadastroVendas = () => {
                 </Typography>
               )}
             </FormGrid>
+            {/* Escolher a forma de pagamento, é inutil? Sim, mas coloca */}
             <FormGrid>
               <FormLabel htmlFor="Pagamento_Venda">Forma de Pagamento</FormLabel>
               <Select

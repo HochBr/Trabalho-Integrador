@@ -10,7 +10,7 @@ exports.listarClientes = async (req, res) => {
         console.log(error);
         res.sendStatus(400);
     }
-}
+} 
 
 exports.adicionarCliente = async(req, res) => {
     try {

@@ -6,7 +6,6 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem'; 
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import { Button, Typography, Tooltip, TextField, } from '@mui/material';
@@ -15,7 +14,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DeleteIcon from '@mui/icons-material/Delete'; 
 import SendIcon from '@mui/icons-material/Send';
-import { CleanOutlinedInput } from '../../theme/customStyles.js'
+
 
 // Estilo personalizado para o Grid
 const FormGrid = styled(Grid)(() => ({
@@ -180,7 +179,7 @@ const CadastroCompra = () => {
         <Box sx={{ mt: 8, width: "100%" }}>
           <Typography variant="h4" gutterBottom>
             Cadastro de Compras
-          </Typography>
+          </Typography> 
           <Grid container spacing={2}>
             {/* Campo ID do Produto */}
             <Grid item xs={12} md={6}>

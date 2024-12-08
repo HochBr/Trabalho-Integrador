@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
 import Navbar from '../TelaGeral/Navbar.jsx';
-import Select from '@mui/material/Select'; // Componente Select do Material-UI
-import MenuItem from '@mui/material/MenuItem'; // Componente MenuItem do Material-UI
+import Select from '@mui/material/Select'; 
+import MenuItem from '@mui/material/MenuItem'; 
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import { Button, Typography } from '@mui/material';
@@ -170,6 +169,7 @@ const CadastroProduto = () => {
           <Box sx={{ mt: 8 /* Margem superior ajustável */, width: '100%' }}>
             <Grid container spacing={2}>
             <FormGrid item xs={12} md={6}>
+              {/* ID do Produto */}
                 <FormLabel htmlFor="ID_Produto">ID do Produto</FormLabel>
                 <CleanOutlinedInput
                   id="ID_Produto"
@@ -188,6 +188,7 @@ const CadastroProduto = () => {
               </FormGrid>
 
               <FormGrid item xs={12} md={6}>
+                {/* Nome do Produto */}
                 <FormLabel htmlFor="Nome_Produto">Nome do Produto</FormLabel>
                 <CleanOutlinedInput
                   id="Nome_Produto"
@@ -206,6 +207,7 @@ const CadastroProduto = () => {
               </FormGrid>
 
               <FormGrid item xs={12} md={6}>
+                {/* Categorias */}
                 <FormLabel htmlFor="Categoria_Produto">
                   Categoria do Produto
                 </FormLabel>
@@ -233,7 +235,7 @@ const CadastroProduto = () => {
                   </Typography>
                 )}
               </FormGrid>
-
+                {/* Fornecedor */}
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Fornecedor_Produto">
                   Fornecedor Produto
@@ -263,7 +265,7 @@ const CadastroProduto = () => {
                 )}
                 
               </FormGrid>
-                
+                {/* Marca do Produto */}
               <FormGrid item xs={12} md={6}>
                 <FormLabel htmlFor="Marca_Produto">Marca do Produto</FormLabel>
                 <CleanOutlinedInput
@@ -282,6 +284,8 @@ const CadastroProduto = () => {
                 )}
               </FormGrid>
               <FormGrid item xs={12} md={6}>
+                {/* Estoque */}
+                {/* Quantidade == 0 || Quantidade != 0 */}
                 <FormLabel htmlFor="Estoque_Produto">Estoque do Produto</FormLabel>
                 <CleanOutlinedInput
                   id="Estoque_Produto"
@@ -301,6 +305,7 @@ const CadastroProduto = () => {
                 <FormGrid item xs={12} md={6}></FormGrid>
                 <FormGrid item xs={12} md={6}></FormGrid>
               <FormGrid item xs={12} md={6}>
+                {/* Valor do Produto */}
                 <FormLabel htmlFor="Valor_Und_Produto">
                   Valor da unidade do Produto
                 </FormLabel>

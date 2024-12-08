@@ -20,7 +20,7 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
   marginBottom: '16px',
 }));
-
+//Controle da tabela
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -227,6 +227,7 @@ const CadastroCategoria = () => {
                 </Button>
               </Grid>
             </Grid>
+            {/*Tabela*/}
             {isTableVisible && ( // Renderiza a tabela apenas se estiver visível
               <TableContainer component={Paper} sx={{ mt: 4 }}>
                 <Table sx={{ minWidth: 500 }} aria-label="Tabela de categorias">
