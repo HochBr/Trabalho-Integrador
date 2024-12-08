@@ -34,5 +34,6 @@ router.get('/produto/countcategoria', protudoController.categoriasProdutoCOUNT);
 router.get('/produto/sumcategoria', protudoController.getVendasPorTempo);
 router.get('/produto/diamais', protudoController.getDiaMaisVendido);
 router.get('/produto/diamenos', protudoController.getDiaMenosVendido);
+router.get('/produto/total', protudoController.total);
 
 module.exports = router; 

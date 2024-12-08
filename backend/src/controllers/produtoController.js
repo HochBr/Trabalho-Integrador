@@ -191,3 +191,37 @@ exports.getDiaMenosVendido = async (req, res) => {
     }
 };
 
+exports.total = async (req, res) => {
+    const { dataInicio, dataFim } = req.query;
+  
+    // Verifica se as datas foram fornecidas
+    if (!dataInicio || !dataFim) {
+      return res.status(400).json({ error: 'As datas de início e fim são necessárias.' });
+    }
+  
+    try {
+      // Consulta SQL para calcular o total de produtos vendidos
+      const total = await db.oneOrNone(`
+        SELECT SUM(vp.quantidade) AS totalVendido
+        FROM venda_produto vp
+        JOIN venda v ON vp.idvenda = v.id
+        WHERE v.datavenda BETWEEN $1 AND $2;
+      `, [dataInicio, dataFim]);
+  
+      console.log('Resultado da consulta:', total);
+      res.json(total);  // Verifique o que está sendo retornado aqui
+        console.log("antes do if");
+      // Verifica se o total vendido foi encontrado
+      if (!total || total.totalVendido === null) {
+        return res.status(404).json({ message: 'Nenhum produto foi vendido neste período.' });
+      }
+      console.log("antes do total vendido");
+      // Retorna o total de produtos vendidos
+    //   res.json({ total: total.totalVendido });
+    } catch (error) {
+      console.error('Erro ao buscar o total de vendas:', error);
+      res.status(500).json({ error: 'Erro interno no servidor.' });
+    }
+  };
+  
+  

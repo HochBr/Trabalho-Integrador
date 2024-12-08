@@ -57,41 +57,50 @@ const DashboardCompras = () => {
 
   const handleFiltro = async () => {
     console.log(`Data Início: ${dataInicio}, Data Fim: ${dataFim}`);
-
+  
     try {
       const responseDiaMais = await fetch(
         `${BASE_URL}/produto/diamais?dataInicio=${dataInicio}&dataFim=${dataFim}`
       );
-      const diaMais = await responseDiaMais.json();
-
+      const textDiaMais = await responseDiaMais.text(); // Obter a resposta como texto
+      console.log('Resposta do diaMais:', textDiaMais);  // Log da resposta
+  
+      const diaMais = JSON.parse(textDiaMais);  // Tentar analisar o texto como JSON
+  
       const responseDiaMenos = await fetch(
         `${BASE_URL}/produto/diamenos?dataInicio=${dataInicio}&dataFim=${dataFim}`
       );
-      const diaMenos = await responseDiaMenos.json();
-
+      const textDiaMenos = await responseDiaMenos.text();
+      console.log('Resposta do diaMenos:', textDiaMenos);
+  
+      const diaMenos = JSON.parse(textDiaMenos);
+  
       const responseTotal = await fetch(
         `${BASE_URL}/produto/total?dataInicio=${dataInicio}&dataFim=${dataFim}`
       );
-      const total = await responseTotal.json();
-
+      const textTotal = await responseTotal.text();
+      console.log('Resposta total:', textTotal);
+  
+      const total = JSON.parse(textTotal);
+  
       const responseCategorias = await fetch(
         `${BASE_URL}/produto/countcategoria?dataInicio=${dataInicio}&dataFim=${dataFim}`
       );
-      const categorias = await responseCategorias.json();
-
-
-      if (responseDiaMais.ok && responseDiaMenos.ok  ) {
+      const textCategorias = await responseCategorias.text();
+      console.log('Resposta categorias:', textCategorias);
+  
+      const categorias = JSON.parse(textCategorias);
+  
+      if (responseDiaMais.ok && responseDiaMenos.ok) {
         setIndicadores({
           diaMaisVendeu: diaMais.dia,
           diaMenosVendeu: diaMenos.dia,
-          botijoesVendidos: total.total,
+          botijoesVendidos: total.totalvendido,
         });
         setCategoriasData({
           labels: categorias.map((cat) => cat.nome),
           values: categorias.map((cat) => cat.quantidade),
         });
-
-
       } else {
         console.error('Erro ao buscar dados:', { diaMais, diaMenos, categorias });
       }
@@ -99,6 +108,8 @@ const DashboardCompras = () => {
       console.error('Erro na conexão com as APIs:', error);
     }
   };
+  
+  
 
   const barChartData = {
     labels: categoriasData.labels,
