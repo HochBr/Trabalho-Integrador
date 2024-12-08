@@ -88,9 +88,22 @@ export default function MiniDrawer() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const userTypeFromStorage = localStorage.getItem('userType'); // Supondo que o tipo de usuário esteja salvo
-    setUserType(userTypeFromStorage || ''); // Atualiza o tipo de usuário
+    const userTypeFromStorage = localStorage.getItem('userType');
+  
+    if (!userTypeFromStorage && token) {
+      // Decodifica o token para recuperar o tipo de usuário se não estiver salvo
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const userType = decodedToken.tipousuario;
+  
+      if (userType) {
+        localStorage.setItem('userType', userType); // Salva no localStorage
+        setUserType(userType); // Atualiza o estado
+      }
+    } else {
+      setUserType(userTypeFromStorage || '');
+    }
   }, []);
+  
 
   const handleToggleCadastros = () => setOpenCadastros(!openCadastros);
   const handleToggleDashboards = () => setOpenDashboards(!openDashboards);
