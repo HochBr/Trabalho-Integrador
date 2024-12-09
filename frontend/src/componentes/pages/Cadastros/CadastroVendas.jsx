@@ -16,6 +16,7 @@ import {
   DialogContentText,
   DialogTitle,
   Snackbar,
+  ButtonGroup,
   MenuItem,
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
@@ -195,7 +196,25 @@ const CadastroVendas = () => {
     fetchData();
   }, []);
 
-  
+const [isNewClient, setIsNewClient] = useState(false);
+const handleSaveCliente = () => {
+  if (isNewClient) {
+    // Validar e salvar o novo cliente
+    if (!clienteAtual.Nome.trim()) {
+      setErrors({ Nome: 'Nome do cliente é obrigatório!' });
+      return;
+    }
+    console.log('Novo cliente cadastrado:', clienteAtual);
+  } else {
+    // Validar cliente selecionado
+    if (!clienteAtual.Nome.trim()) {
+      setErrors({ Nome: 'Selecione um cliente existente!' });
+      return;
+    }
+    console.log('Cliente existente selecionado:', clienteAtual);
+  }
+  handleCloseDialog();
+};
 
   return (
     <div>
@@ -325,79 +344,88 @@ const CadastroVendas = () => {
   <DialogTitle>Informações do Cliente</DialogTitle>
   <DialogContent>
     <DialogContentText>
-      Por favor, preencha os dados do cliente ou selecione um cliente existente para concluir a venda.
+      Escolha um cliente existente ou cadastre um novo cliente para concluir a venda.
     </DialogContentText>
-    <FormGrid>
-      <FormLabel htmlFor="ClienteExistente">Selecionar Cliente</FormLabel>
-      <Select
-        id="ClienteExistente"
-        name="ClienteExistente"
-        value={clienteAtual.Nome} // Aqui assumimos que o campo "Nome" identifica o cliente
-        onChange={(e) => handleFiadoChange({ target: { name: 'Nome', value: e.target.value } })}
-        size="small"
-        fullWidth
+    <ButtonGroup sx={{ mb: 2 }}>
+      <Button
+        variant={!isNewClient ? 'contained' : 'outlined'}
+        onClick={() => setIsNewClient(false)}
       >
-        <MenuItem value="" disabled>
-          Selecione um cliente
-        </MenuItem>
-        {clientes.map((cliente) => (
-          <MenuItem key={cliente.id} value={cliente.nome}>
-            {cliente.nome}
+        Selecionar Cliente
+      </Button>
+      <Button
+        variant={isNewClient ? 'contained' : 'outlined'}
+        onClick={() => setIsNewClient(true)}
+      >
+        Cadastrar Cliente
+      </Button>
+    </ButtonGroup>
+    {!isNewClient ? (
+      <FormGrid>
+        <FormLabel htmlFor="ClienteExistente">Selecionar Cliente</FormLabel>
+        <Select
+          id="ClienteExistente"
+          name="ClienteExistente"
+          value={clienteAtual.Nome}
+          onChange={(e) =>
+            handleFiadoChange({ target: { name: 'Nome', value: e.target.value } })
+          }
+          size="small"
+          fullWidth
+        >
+          <MenuItem value="" disabled>
+            Selecione um cliente
           </MenuItem>
-        ))}
-      </Select>
-    </FormGrid>
-    <Typography variant="subtitle2" sx={{ mt: 2, mb: 2 }}>
-      Ou crie um novo cliente:
-    </Typography>
-    <FormGrid>
-      <FormLabel htmlFor="Nome">Nome do Cliente</FormLabel>
-      <OutlinedInput
-        id="Nome"
-        name="Nome"
-        value={clienteAtual.Nome}
-        onChange={handleFiadoChange}
-        size="small"
-        fullWidth
-      />
-    </FormGrid>
-    <FormGrid>
-      <FormLabel htmlFor="Contato">Contato</FormLabel>
-      <OutlinedInput
-        id="Contato"
-        name="Contato"
-        value={clienteAtual.Contato}
-        onChange={handleFiadoChange}
-        size="small"
-        fullWidth
-      />
-    </FormGrid>
-    <FormGrid>
-      <FormLabel htmlFor="Endereco">Endereço</FormLabel>
-      <OutlinedInput
-        id="Endereco"
-        name="Endereco"
-        value={clienteAtual.Endereco}
-        onChange={handleFiadoChange}
-        size="small"
-        fullWidth
-      />
-    </FormGrid>
+          {clientes.map((cliente) => (
+            <MenuItem key={cliente.id} value={cliente.nome}>
+              {cliente.nome}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormGrid>
+    ) : (
+      <>
+        <FormGrid>
+          <FormLabel htmlFor="Nome">Nome do Cliente</FormLabel>
+          <OutlinedInput
+            id="Nome"
+            name="Nome"
+            value={clienteAtual.Nome}
+            onChange={handleFiadoChange}
+            size="small"
+            fullWidth
+          />
+        </FormGrid>
+        <FormGrid>
+          <FormLabel htmlFor="Contato">Contato</FormLabel>
+          <OutlinedInput
+            id="Contato"
+            name="Contato"
+            value={clienteAtual.Contato}
+            onChange={handleFiadoChange}
+            size="small"
+            fullWidth
+          />
+        </FormGrid>
+        <FormGrid>
+          <FormLabel htmlFor="Endereco">Endereço</FormLabel>
+          <OutlinedInput
+            id="Endereco"
+            name="Endereco"
+            value={clienteAtual.Endereco}
+            onChange={handleFiadoChange}
+            size="small"
+            fullWidth
+          />
+        </FormGrid>
+      </>
+    )}
   </DialogContent>
   <DialogActions>
     <Button onClick={handleCloseDialog} color="secondary">
       Cancelar
     </Button>
-    <Button
-      onClick={() => {
-        if (clienteAtual.Nome.trim()) {
-          // Função de criar cliente pode ser adicionada aqui
-          console.log('Novo cliente:', clientes);
-        }
-        handleCloseDialog();
-      }}
-      color="primary"
-    >
+    <Button onClick={handleSaveCliente} color="primary">
       Salvar
     </Button>
   </DialogActions>
