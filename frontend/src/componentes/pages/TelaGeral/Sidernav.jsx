@@ -155,7 +155,7 @@ export default function MiniDrawer() {
               </ListItemButton>
               <Collapse in={open && openCadastros} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  {['Produto', 'Fornecedor', 'Vendas', 'Categoria', 'Compra'].map((item) => (
+                  {['Produto', 'Fornecedor', 'Vendas', 'Categoria', 'Compra', 'Cliente'].map((item) => (
                     <ListItem key={item} disablePadding>
                       <ListItemButton
                         onClick={() => open && navigate(`/cadastro-${item.toLowerCase()}`)}

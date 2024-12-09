@@ -19,6 +19,7 @@ import {
 } from '@mui/icons-material';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
+import foto from '../TelaGeral/assets/dede.png';
 
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
@@ -238,8 +239,20 @@ const CatalogoFornecedores = () => {
 
       {/* Diálogo para edição */}
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Editar Fornecedor</DialogTitle>
-        <img></img>
+        <DialogTitle>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+      <Typography variant="h6" fontWeight="bold">
+        Editar Fornecedor
+      </Typography>
+      <img
+        src={foto}
+        alt="Produto"
+        style={{ borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
+        width={50}
+      />
+    </Box>
+        </DialogTitle>
+
         <DialogContent>
           <TextField
             margin="dense"
@@ -296,7 +309,7 @@ const CatalogoFornecedores = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar para sucesso de edição */}
+      {/* Snackbar para sucesso de edição */} 
       <Snackbar
         open={snackbarEditOpen}
         autoHideDuration={3000}

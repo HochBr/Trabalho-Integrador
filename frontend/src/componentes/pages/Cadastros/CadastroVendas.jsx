@@ -91,9 +91,9 @@ const CadastroVendas = () => {
     if (!currentProduct.Quantidade.trim()) {
       newErrors.Quantidade = 'Quantidade é obrigatória!';
     }
-    if (!formValues.Pagamento_Venda.trim()) {
-      newErrors.Pagamento_Venda = 'Forma de pagamento é obrigatória!';
-    }
+    //if (!formValues.Pagamento_Venda.trim()) {
+      //newErrors.Pagamento_Venda = 'Forma de pagamento é obrigatória!';
+    //}
     if (!formValues.Data_Venda.trim()) {
       newErrors.Data_Venda = 'Data da venda é obrigatória!';
     }

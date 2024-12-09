@@ -28,4 +28,4 @@ router.delete(
     authMiddleware.restrictAccess(['Administrador']), 
     clienteController.excluirCliente);
 
-module.exports = router; 
+module.exports = router;  
