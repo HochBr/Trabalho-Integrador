@@ -7,7 +7,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.get(
     '/cliente', 
     authMiddleware.authenticateJWT,
-    authMiddleware.restrictAccess(['Administrador, Visualizador']),
+    authMiddleware.restrictAccess(['Administrador', 'Visualizador']),
     clienteController.listarClientes);
 
 router.post(
