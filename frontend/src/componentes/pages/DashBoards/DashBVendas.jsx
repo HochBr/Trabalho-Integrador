@@ -34,8 +34,12 @@ const DashboardCompras = () => {
   
     try {
       //dia mais vendido
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Recupera o token do localStorage
+      };
       const responseDiaMais = await fetch(
-        `${BASE_URL}/produto/diamais?dataInicio=${dataInicio}&dataFim=${dataFim}`
+        `${BASE_URL}/produto/diamais?dataInicio=${dataInicio}&dataFim=${dataFim}`,
+        {headers}
       );
       const textDiaMais = await responseDiaMais.text(); // Obter a resposta como texto
       console.log('Resposta do diaMais:', textDiaMais);  // Log da resposta
@@ -43,7 +47,8 @@ const DashboardCompras = () => {
       const diaMais = JSON.parse(textDiaMais);  // Tentar analisar o texto como JSON
       //dia menos vendido
       const responseDiaMenos = await fetch(
-        `${BASE_URL}/produto/diamenos?dataInicio=${dataInicio}&dataFim=${dataFim}`
+        `${BASE_URL}/produto/diamenos?dataInicio=${dataInicio}&dataFim=${dataFim}`,
+        {headers}
       );
       const textDiaMenos = await responseDiaMenos.text();
       console.log('Resposta do diaMenos:', textDiaMenos);
@@ -51,7 +56,8 @@ const DashboardCompras = () => {
       const diaMenos = JSON.parse(textDiaMenos);
       //total de vendas
       const responseTotal = await fetch(
-        `${BASE_URL}/produto/total?dataInicio=${dataInicio}&dataFim=${dataFim}`
+        `${BASE_URL}/produto/total?dataInicio=${dataInicio}&dataFim=${dataFim}`,
+        {headers}
       );
       const textTotal = await responseTotal.text();
       console.log('Resposta total:', textTotal);
@@ -59,7 +65,8 @@ const DashboardCompras = () => {
       const total = JSON.parse(textTotal);
       //média de vendas
       const responseMedia = await fetch(
-        `${BASE_URL}/produto/media?dataInicio=${dataInicio}&dataFim=${dataFim}`
+        `${BASE_URL}/produto/media?dataInicio=${dataInicio}&dataFim=${dataFim}`,
+        {headers}
       );
       const textMedia = await responseMedia.text();
       console.log('Resposta total:', textMedia);
@@ -69,7 +76,8 @@ const DashboardCompras = () => {
       
 
       const responseCategorias = await fetch(
-        `${BASE_URL}/produto/countcategoria?dataInicio=${dataInicio}&dataFim=${dataFim}`
+        `${BASE_URL}/produto/countcategoria?dataInicio=${dataInicio}&dataFim=${dataFim}`,
+        {headers}
       );
       const textCategorias = await responseCategorias.text();
       console.log('Resposta categorias:', textCategorias);

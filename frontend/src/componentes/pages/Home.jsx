@@ -84,7 +84,9 @@ const Home = () => {
   const listarClientes = async () => {
     try {
       const response = await axios.get('http://localhost:3001/cliente', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
       setCliente(response.data);
     } catch (error) {
@@ -135,7 +137,11 @@ const Home = () => {
       return;
     }
     try {
-      await axios.put(`http://localhost:3001/cliente/${editId}`, formValues);
+      await axios.put(`http://localhost:3001/cliente/${editId}`, formValues, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       handleDialogClose();
       listarClientes();
     } catch (error) {
