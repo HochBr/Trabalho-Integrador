@@ -300,11 +300,12 @@ const handleSaveCliente = () => {
       <Select
         id="ClienteExistente"
         name="ClienteExistente"
-        value={clienteAtual.Nome}
+        value={clienteAtual.Nome || ''}
         onChange={(e) => {
           const selectedCliente = clientes.find(cliente => cliente.nome === e.target.value);
           setClienteAtual((prev) => ({
             ...prev,
+            id: selectedCliente?.id || '',
             Nome: selectedCliente?.nome || '',
             Contato: selectedCliente?.contato || '',
             Endereco: selectedCliente?.endereco || '',
