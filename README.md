@@ -24,8 +24,8 @@ CSS (Cascading Style Sheets) é uma linguagem usada para estilizar e definir o l
 ### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original-wordmark.svg" width ='25' height = '25' />HTML:
 HTML (HyperText Markup Language) é a linguagem padrão para estruturar e organizar o conteúdo de páginas web, utilizando elementos como títulos, parágrafos, links e imagens.
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bootstrap/bootstrap-original.svg" width ='25' height = '25' />Bootstrap:
-Bootstrap é um framework de código aberto para HTML, CSS e JavaScript que facilita a criação de sites responsivos e designs consistentes, oferecendo componentes e estilos prontos para uso, como botões, formulários e grids.
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/materialui/materialui-original.svg" width ='25' height = '25' />Material UI:
+MUI uma biblioteca de componentes React de código aberto que implementa o Material Design do Google.
     
 ### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/microsoftsqlserver/microsoftsqlserver-original.svg" width ='25' height = '25' />SQL:
 SQL (Structured Query Language) é uma linguagem utilizada para gerenciar e manipular bancos de dados relacionais, permitindo realizar operações como consultas, inserções, atualizações e exclusões de dados.
@@ -38,6 +38,5 @@ O Trello é uma plataforma de gerenciamento de projetos baseada em quadros, que 
 - <img src="https://github.com/user-attachments/assets/f6183fcf-0451-4df0-87f2-4652445891bf" width="40" height="40"> 2311100062 - Gustavo Botezini: https://www.linkedin.com/in/gustavo-botezini-0144a32b6/
 
 - <img src="https://github.com/user-attachments/assets/bdde1883-97c1-4a68-9f5d-163784734766" width ='40' height ='40'> 2311100019 - Leonardo de Oliveira Klitzke: @leoliveirak_ 
-"
 
 
