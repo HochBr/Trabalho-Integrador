@@ -11,7 +11,7 @@ exports.listarClientes = async (req, res) => {
         res.sendStatus(400);
     }
 } 
-
+  
 exports.adicionarCliente = async(req, res) => {
     try {
         const {nome, endereco, saldo, contato} = req.body;
