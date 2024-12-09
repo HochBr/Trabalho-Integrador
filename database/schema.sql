@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Produto (
     ID INT PRIMARY KEY,
     Nome VARCHAR(255) NOT NULL,
     Valor DECIMAL(10, 2) NOT NULL,
-    Marca VARCHAR(255) NOT NULL,
+    Marca VARCHAR(255) NOT NULL, 
     CategoriaID INT,
     FornecedorCNPJ VARCHAR(14),
     Estoque INT NOT NULL,
@@ -193,5 +193,6 @@ VALUES
 INSERT INTO usuario (username, nome, senha, tipousuario)
 VALUES 
 ('Administrador', 'Jedilson', '$2b$10$K1Qc.rg2Yc29nYz9PzL9cu3UhuhdxFSR51Ky64n.J.FqUiJ.sTiDe', 'Administrador'),
-('Visualizador', 'Joana Souza', '$2b$10$3y.y8oPcvSn2u1DyMPVVmeXqtT3U6bL79D7ib1p9FpoQ9/FQ6O3eS', 'Visualizador');
+('Visualizador', 'Joana Souza', '$2b$10$3y.y8oPcvSn2u1DyMPVVmeXqtT3U6bL79D7ib1p9FpoQ9/FQ6O3eS', 'Visualizador'),
+('admin', 'admin', '$2b$10$kOBcf8nWfksnOh1aYuqjP.125NBiMoECt3R5xWqt9IsLRD7dttTy.', 'Administrador');
 
