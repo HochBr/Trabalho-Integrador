@@ -99,7 +99,7 @@ const CadastroVendas = () => {
     if (!currentProduct.Produto?.trim()) {
       newErrors.Produto = 'Nome do produto é obrigatório!';
     }
-    if (!clientes.Nome?.trim()) {
+    if (!clienteAtual.Nome?.trim()) {
       newErrors.Nome = 'Nome do cliente é obrigatório!';
     }
     //contato
@@ -134,21 +134,21 @@ const CadastroVendas = () => {
         contato: clienteAtual.Contato,
       };
 
-      try {
-        await axios.post('http://localhost:3001/cliente', DadosCliente, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-      } catch (error) {
-        console.error('Erro ao salvar cliente:', error);
-        return;
-      }
+      // try {
+      //   await axios.post('http://localhost:3001/cliente', DadosCliente, {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+      //     },
+      //   });
+      // } catch (error) {
+      //   console.error('Erro ao salvar cliente:', error);
+      //   return;
+      // }
     }
 
     // Criar venda
     const dadosVenda = {
-      idcliente: clienteAtual.Nome,
+      idcliente: clienteAtual.id,
       idproduto: produtoSelecionado.id,
       datavenda: formValues.Data_Venda,
       quantidade: parseInt(currentProduct.Quantidade, 10),
@@ -332,7 +332,7 @@ const CadastroVendas = () => {
       <Select
         id="ClienteExistente"
         name="ClienteExistente"
-        value={clientes.Nome} // Aqui assumimos que o campo "Nome" identifica o cliente
+        value={clienteAtual.Nome} // Aqui assumimos que o campo "Nome" identifica o cliente
         onChange={(e) => handleFiadoChange({ target: { name: 'Nome', value: e.target.value } })}
         size="small"
         fullWidth
@@ -355,7 +355,7 @@ const CadastroVendas = () => {
       <OutlinedInput
         id="Nome"
         name="Nome"
-        value={clientes.Nome}
+        value={clienteAtual.Nome}
         onChange={handleFiadoChange}
         size="small"
         fullWidth
@@ -366,7 +366,7 @@ const CadastroVendas = () => {
       <OutlinedInput
         id="Contato"
         name="Contato"
-        value={clientes.Contato}
+        value={clienteAtual.Contato}
         onChange={handleFiadoChange}
         size="small"
         fullWidth
@@ -377,7 +377,7 @@ const CadastroVendas = () => {
       <OutlinedInput
         id="Endereco"
         name="Endereco"
-        value={clientes.Endereco}
+        value={clienteAtual.Endereco}
         onChange={handleFiadoChange}
         size="small"
         fullWidth
@@ -390,7 +390,7 @@ const CadastroVendas = () => {
     </Button>
     <Button
       onClick={() => {
-        if (clientes.Nome.trim()) {
+        if (clienteAtual.Nome.trim()) {
           // Função de criar cliente pode ser adicionada aqui
           console.log('Novo cliente:', clientes);
         }
