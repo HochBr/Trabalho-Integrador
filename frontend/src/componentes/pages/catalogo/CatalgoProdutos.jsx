@@ -164,6 +164,11 @@ const CatalogoProdutos = () => {
         CategoriaID: formValues.CategoriaID || null,
         fornecedorCNPJ: formValues.fornecedorCNPJ || null,
         estoque: formValues.estoque || null,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
       handleDialogClose();
       listarProdutos();

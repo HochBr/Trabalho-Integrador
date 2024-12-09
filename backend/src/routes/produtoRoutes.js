@@ -30,11 +30,40 @@ router.delete(
     authMiddleware.restrictAccess(['Administrador']),
     protudoController.excluirProduto
 );
-router.get('/produto/countcategoria', protudoController.categoriasProdutoCOUNT);
-router.get('/produto/sumcategoria', protudoController.getVendasPorTempo);
-router.get('/produto/diamais', protudoController.getDiaMaisVendido);
-router.get('/produto/diamenos', protudoController.getDiaMenosVendido);
-router.get('/produto/total', protudoController.total);
-router.get('/produto/media',protudoController.media);
+router.get(
+    '/produto/countcategoria', 
+    authMiddleware.authenticateJWT,
+    authMiddleware.restrictAccess(['Administrador', 'Visualizador']),
+    protudoController.categoriasProdutoCOUNT);
+
+router.get(
+    '/produto/sumcategoria', 
+    authMiddleware.authenticateJWT,
+    authMiddleware.restrictAccess(['Administrador', 'Visualizador']),
+    protudoController.getVendasPorTempo);
+
+router.get(
+    '/produto/diamais', 
+    authMiddleware.authenticateJWT,
+    authMiddleware.restrictAccess(['Administrador', 'Visualizador']),
+    protudoController.getDiaMaisVendido);
+
+router.get(
+    '/produto/diamenos', 
+    authMiddleware.authenticateJWT,
+    authMiddleware.restrictAccess(['Administrador', 'Visualizador']),
+    protudoController.getDiaMenosVendido);
+
+router.get(
+    '/produto/total', 
+    authMiddleware.authenticateJWT,
+    authMiddleware.restrictAccess(['Administrador', 'Visualizador']),
+    protudoController.total);
+
+router.get(
+    '/produto/media',
+    authMiddleware.authenticateJWT,
+    authMiddleware.restrictAccess(['Administrador', 'Visualizador']),
+    protudoController.media);
 
 module.exports = router; 
