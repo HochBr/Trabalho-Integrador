@@ -15,7 +15,7 @@ router.get(
 
 router.post(
     '/user', 
-    uthMiddleware.authenticateJWT,
+    authMiddleware.authenticateJWT,
     authMiddleware.restrictAccess(['Administrador']),
     userController.adicionarUsuario
     );
