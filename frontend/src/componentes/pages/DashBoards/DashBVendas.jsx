@@ -178,7 +178,7 @@ return (
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    Botijões Vendidos no Período
+                    Itens Vendidos no Período
                   </Typography>
                   <Typography variant="h4">{indicadores.botijoesVendidos}</Typography>
                 </CardContent>
@@ -188,7 +188,7 @@ return (
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    Média de botijões vendidos
+                    Média de Itens vendidos
                   </Typography>
                   <Typography variant="h4">{indicadores.media}</Typography>
                 </CardContent>

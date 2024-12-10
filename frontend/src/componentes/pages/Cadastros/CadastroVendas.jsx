@@ -100,9 +100,9 @@ const CadastroVendas = () => {
     if (!currentProduct.Produto?.trim()) {
       newErrors.Produto = 'Nome do produto é obrigatório!';
     }
-    if (!clienteAtual.Nome?.trim()) {
-      newErrors.Nome = 'Nome do cliente é obrigatório!';
-    }
+    // if (!clienteAtual.Nome?.trim()) {
+    //   newErrors.Nome = 'Nome do cliente é obrigatório!';
+    // }
     //contato
     //endereço
 
@@ -296,7 +296,7 @@ const handleSaveCliente = () => {
             </FormGrid>
             {/* Escolher a forma de pagamento, é inutil? Sim, mas coloca */}
             <FormGrid>
-            <FormLabel htmlFor="ClienteExistente">Selecionar Cliente</FormLabel>
+            <FormLabel htmlFor="ClienteExistente">Selecionar Cliente - FIADO</FormLabel>
       <Select
         id="ClienteExistente"
         name="ClienteExistente"

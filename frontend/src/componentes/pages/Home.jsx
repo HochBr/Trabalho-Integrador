@@ -17,7 +17,6 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import foto from './TelaGeral/assets/gian.png';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -242,12 +241,6 @@ const Home = () => {
                 <Typography variant="h6" fontWeight="bold">
                   Editar cliente
                 </Typography>
-                <img
-                  src={foto}
-                  alt="cliente"
-                  style={{ borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
-                  width={50}
-                />
               </Box>
             </DialogTitle>
 
