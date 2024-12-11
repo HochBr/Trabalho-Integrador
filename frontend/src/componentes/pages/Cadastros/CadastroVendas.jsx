@@ -49,6 +49,7 @@ const CadastroVendas = () => {
   });
   const [errors, setErrors] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbarError, setOpenSnackbarError] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
   // Atualizar o produto sendo editado
@@ -121,6 +122,13 @@ const CadastroVendas = () => {
       return;
     }
 
+    // Verificar se a quantidade é maior que o estoque
+    if (parseInt(currentProduct.Quantidade, 10) > produtoSelecionado.estoque) {
+      setOpenSnackbarError(true);
+      return;
+    }
+
+
     // Calcular saldo do cliente (caso seja fiado)
     const saldoAtualizado =
       clienteAtual.saldo +
@@ -170,6 +178,7 @@ const CadastroVendas = () => {
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') return;
     setOpenSnackbar(false);
+    setOpenSnackbarError(false);
   };
 
   const handleCloseDialog = () => {
@@ -343,6 +352,16 @@ const handleSaveCliente = () => {
       >
         <MuiAlert severity="success" sx={{ width: '100%' }}>
           Venda registrada com sucesso!
+        </MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={openSnackbarError}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert severity="error" sx={{ width: '100%' }}>
+          Venda não registrada! 
+           Não possui o suficiente no estoque
         </MuiAlert>
       </Snackbar>
     </div>
