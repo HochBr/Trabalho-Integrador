@@ -19,7 +19,6 @@ import {
 } from '@mui/icons-material';
 import Navbar from '../TelaGeral/Navbar.jsx';
 import Sidernav from '../TelaGeral/Sidernav.jsx';
-import foto from '../TelaGeral/assets/dede.png';
 
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
@@ -244,12 +243,6 @@ const CatalogoFornecedores = () => {
       <Typography variant="h6" fontWeight="bold">
         Editar Fornecedor
       </Typography>
-      <img
-        src={foto}
-        alt="Produto"
-        style={{ borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
-        width={50}
-      />
     </Box>
         </DialogTitle>
 

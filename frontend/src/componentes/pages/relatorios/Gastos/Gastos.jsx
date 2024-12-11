@@ -236,7 +236,13 @@ const RelatorioGastos = () => {
       <TableCell>{gasto.fornecedor}</TableCell>
       <TableCell>{gasto.quantidade}</TableCell>
       <TableCell>{gasto.precocompra}</TableCell>
-      <TableCell>{gasto.vencimento}</TableCell>
+      <TableCell>{gasto.vencimento
+        ? new Date(gasto.dtcompra).toLocaleDateString('pt-BR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        })
+      : '-'}</TableCell>
       <TableCell>{gasto.total}</TableCell>
       <TableCell>
         <IconButton onClick={() => handleEdit(gasto.id, gasto)} color="primary">

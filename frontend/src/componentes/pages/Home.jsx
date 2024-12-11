@@ -17,7 +17,6 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import foto from './TelaGeral/assets/gian.png';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -88,7 +87,7 @@ const Home = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      const clienteDevedor =response.data.filter(cliente => cliente.saldo > 0);
+      const clienteDevedor =response.data.filter(cliente => cliente.saldo < 0);
       setCliente(clienteDevedor);
     } catch (error) {
       console.error('Erro ao listar clientes:', error);
@@ -243,12 +242,6 @@ const Home = () => {
                 <Typography variant="h6" fontWeight="bold">
                   Editar cliente
                 </Typography>
-                <img
-                  src={foto}
-                  alt="cliente"
-                  style={{ borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
-                  width={50}
-                />
               </Box>
             </DialogTitle>
 

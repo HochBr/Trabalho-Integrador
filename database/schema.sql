@@ -1,3 +1,7 @@
+CREATE DATABASE transportesbotezini;
+
+\c transportesbotezini;
+
 CREATE TABLE IF NOT EXISTS Fornecedor (
     CNPJ VARCHAR(14) PRIMARY KEY,
     Nome VARCHAR(255) NOT NULL,

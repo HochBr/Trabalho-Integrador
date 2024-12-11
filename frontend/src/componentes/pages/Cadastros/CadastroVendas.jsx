@@ -100,9 +100,9 @@ const CadastroVendas = () => {
     if (!currentProduct.Produto?.trim()) {
       newErrors.Produto = 'Nome do produto é obrigatório!';
     }
-    if (!clienteAtual.Nome?.trim()) {
-      newErrors.Nome = 'Nome do cliente é obrigatório!';
-    }
+    // if (!clienteAtual.Nome?.trim()) {
+    //   newErrors.Nome = 'Nome do cliente é obrigatório!';
+    // }
     //contato
     //endereço
 
@@ -296,29 +296,34 @@ const handleSaveCliente = () => {
             </FormGrid>
             {/* Escolher a forma de pagamento, é inutil? Sim, mas coloca */}
             <FormGrid>
-              <FormLabel htmlFor="Pagamento_Venda">Forma de Pagamento</FormLabel>
-              <Select
-                id="Pagamento_Venda"
-                name="Pagamento_Venda"
-                value={formValues.Pagamento_Venda}
-                onChange={handleFormChange}
-                size="small"
-                error={!!errors.Pagamento_Venda}
-                fullWidth
-              >
-                <MenuItem value="" disabled>
-                  Selecione a forma de pagamento
-                </MenuItem>
-                <MenuItem value="Dinheiro">Dinheiro</MenuItem>
-                <MenuItem value="Cartão">Cartão</MenuItem>
-                <MenuItem value="Pix">Pix</MenuItem>
-                <MenuItem value="Fiado">Fiado</MenuItem>
-              </Select>
-              {errors.Pagamento_Venda && (
-                <Typography color="error" variant="body2">
-                  {errors.Pagamento_Venda}
-                </Typography>
-              )}
+            <FormLabel htmlFor="ClienteExistente">Selecionar Cliente - FIADO</FormLabel>
+      <Select
+        id="ClienteExistente"
+        name="ClienteExistente"
+        value={clienteAtual.Nome || ''}
+        onChange={(e) => {
+          const selectedCliente = clientes.find(cliente => cliente.nome === e.target.value);
+          setClienteAtual((prev) => ({
+            ...prev,
+            id: selectedCliente?.id || '',
+            Nome: selectedCliente?.nome || '',
+            Contato: selectedCliente?.contato || '',
+            Endereco: selectedCliente?.endereco || '',
+            saldo: selectedCliente?.saldo || 0,
+          }));
+        }}
+        size="small"
+        fullWidth
+      >
+        <MenuItem value="" disabled>
+          Selecione um cliente
+        </MenuItem>
+        {clientes.map((cliente) => (
+          <MenuItem key={cliente.id} value={cliente.nome}>
+            {cliente.nome}
+          </MenuItem>
+        ))}
+      </Select>
             </FormGrid>
             <Button
               endIcon={<SendIcon />}
@@ -340,97 +345,6 @@ const handleSaveCliente = () => {
           Venda registrada com sucesso!
         </MuiAlert>
       </Snackbar>
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-  <DialogTitle>Informações do Cliente</DialogTitle>
-  <DialogContent>
-    <DialogContentText>
-      Escolha um cliente existente ou cadastre um novo cliente para concluir a venda.
-    </DialogContentText>
-    <ButtonGroup sx={{ mb: 2 }}>
-      <Button
-        variant={!isNewClient ? 'contained' : 'outlined'}
-        onClick={() => setIsNewClient(false)}
-      >
-        Selecionar Cliente
-      </Button>
-      <Button
-        variant={isNewClient ? 'contained' : 'outlined'}
-        onClick={() => setIsNewClient(true)}
-      >
-        Cadastrar Cliente
-      </Button>
-    </ButtonGroup>
-    {!isNewClient ? (
-      <FormGrid>
-        <FormLabel htmlFor="ClienteExistente">Selecionar Cliente</FormLabel>
-        <Select
-          id="ClienteExistente"
-          name="ClienteExistente"
-          value={clienteAtual.Nome}
-          onChange={(e) =>
-            handleFiadoChange({ target: { name: 'Nome', value: e.target.value } })
-          }
-          size="small"
-          fullWidth
-        >
-          <MenuItem value="" disabled>
-            Selecione um cliente
-          </MenuItem>
-          {clientes.map((cliente) => (
-            <MenuItem key={cliente.id} value={cliente.nome}>
-              {cliente.nome}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormGrid>
-    ) : (
-      <>
-        <FormGrid>
-          <FormLabel htmlFor="Nome">Nome do Cliente</FormLabel>
-          <OutlinedInput
-            id="Nome"
-            name="Nome"
-            value={clienteAtual.Nome}
-            onChange={handleFiadoChange}
-            size="small"
-            fullWidth
-          />
-        </FormGrid>
-        <FormGrid>
-          <FormLabel htmlFor="Contato">Contato</FormLabel>
-          <OutlinedInput
-            id="Contato"
-            name="Contato"
-            value={clienteAtual.Contato}
-            onChange={handleFiadoChange}
-            size="small"
-            fullWidth
-          />
-        </FormGrid>
-        <FormGrid>
-          <FormLabel htmlFor="Endereco">Endereço</FormLabel>
-          <OutlinedInput
-            id="Endereco"
-            name="Endereco"
-            value={clienteAtual.Endereco}
-            onChange={handleFiadoChange}
-            size="small"
-            fullWidth
-          />
-        </FormGrid>
-      </>
-    )}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleCloseDialog} color="secondary">
-      Cancelar
-    </Button>
-    <Button onClick={handleSaveCliente} color="primary">
-      Salvar
-    </Button>
-  </DialogActions>
-</Dialog>
-
     </div>
   );
 };

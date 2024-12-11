@@ -209,12 +209,12 @@ const RelatorioGastos = () => {
             <TableHead>
   <TableRow>
     <TableCell>ID</TableCell>
-    <TableCell>Data da Compra</TableCell>
+    <TableCell>Data da Venda</TableCell>
     <TableCell>Produto</TableCell>
-    <TableCell>Fornecedor</TableCell>
+    {/* <TableCell>Fornecedor</TableCell> */}
     <TableCell>Quantidade</TableCell>
     <TableCell>Preço</TableCell>
-    <TableCell>Vencimento</TableCell>
+    <TableCell>Cliente</TableCell>
     <TableCell>Total</TableCell>
     <TableCell>Ações</TableCell>
   </TableRow>
@@ -223,12 +223,19 @@ const RelatorioGastos = () => {
   {gastos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((gasto) => (
     <TableRow key={gasto.id}>
       <TableCell>{gasto.id}</TableCell>
-      <TableCell>{gasto.dtcompra}</TableCell>
+      <TableCell>{gasto.datavenda
+        ? new Date(gasto.datavenda).toLocaleDateString('pt-BR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        })
+      : '-'}
+      </TableCell>
       <TableCell>{gasto.produto}</TableCell>
-      <TableCell>{gasto.fornecedor}</TableCell>
+      {/* <TableCell>{gasto.fornecedor}</TableCell> */}
       <TableCell>{gasto.quantidade}</TableCell>
-      <TableCell>{gasto.precocompra}</TableCell>
-      <TableCell>{gasto.vencimento}</TableCell>
+      <TableCell>{gasto.valor}</TableCell>
+      <TableCell>{gasto.cliente}</TableCell>
       <TableCell>{gasto.total}</TableCell>
       <TableCell>
         <IconButton onClick={() => handleEdit(gasto.id, gasto)} color="primary">

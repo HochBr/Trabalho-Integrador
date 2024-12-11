@@ -17,7 +17,6 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import foto from '../TelaGeral/assets/Geomar.png';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -212,8 +211,8 @@ const CatalogoProdutos = () => {
                       <TableCell>{prod.nome}</TableCell>
                       <TableCell>{prod.marca}</TableCell>
                       <TableCell>{prod.valor}</TableCell>
-                      <TableCell>{prod.fornecedorCNPJ || 'N/A'}</TableCell>
-                      <TableCell>{prod.categoria || 'N/A'}</TableCell>
+                      <TableCell>{prod.fornecedorcnpj || 'N/A'}</TableCell>
+                      <TableCell>{prod.categoriaid || 'N/A'}</TableCell>
                       <TableCell>{prod.estoque || '0'}</TableCell>
                       <TableCell>
                         <IconButton
@@ -252,12 +251,6 @@ const CatalogoProdutos = () => {
       <Typography variant="h6" fontWeight="bold">
         Editar Produto
       </Typography>
-      <img
-        src={foto}
-        alt="Produto"
-        style={{ borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
-        width={50}
-      />
     </Box>
   </DialogTitle>
 

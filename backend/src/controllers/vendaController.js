@@ -4,12 +4,13 @@ const db = require("../config/db");
 exports.listarVendas = async (req, res) => {
     try {
         const vendas = await db.any(`
-            SELECT v.id, p.nome as produto, p.valor as "Valor unitário", 
-            vp.quantidade, v.datavenda as "Data da venda", c.nome as Cliente, 
+            SELECT v.id, p.nome as produto, p.valor, 
+            vp.quantidade, v.datavenda, c.nome as Cliente, 
             (vp.quantidade * p.valor) as Total 
             FROM produto p JOIN venda_produto vp on p.id = vp.idproduto 
             JOIN venda v on vp.idvenda=v.id 
             LEFT JOIN cliente c ON v.idcliente = c.id
+            ORDER BY datavenda desc
         `);
         console.log("Retornando todas as vendas.");
         res.json(vendas).status(200);
