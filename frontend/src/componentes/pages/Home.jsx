@@ -88,7 +88,8 @@ const Home = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      setCliente(response.data);
+      const clienteDevedor =response.data.filter(cliente => cliente.saldo > 0);
+      setCliente(clienteDevedor);
     } catch (error) {
       console.error('Erro ao listar clientes:', error);
     }
